@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import Navbar from "../navbar";
-import {Box, Center, Container, Flex, Spacer, Image, useColorModeValue, Heading} from '@chakra-ui/react'
+import {Box, Container,useColorModeValue } from '@chakra-ui/react'
 
 const Main = ({ children, router }) => {
 

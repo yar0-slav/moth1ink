@@ -7,7 +7,7 @@ import SocialSidebar from "../components/layouts/SocialSidebar";
 
 import { gsap } from "gsap/dist/gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useEffect } from 'react'
 
 
 const LazyVoxelDog = dynamic(() => import('../components/model-custom'), {
@@ -99,7 +99,7 @@ const Page = () => {
                     </Center>
                     <Spacer />
                     <Center>
-                        <Image src='/image6.png'/>
+                        <Image src='/image6.png' alt='Tattoo Image' />
                     </Center>
                 </Flex>
             </Container>
@@ -109,7 +109,7 @@ const Page = () => {
                     flexDirection={{ base: 'column', md: 'row' }}
                 >
                     <Center>
-                        <Image src='/image6.png'/>
+                        <Image src='/image6.png' alt='Tattoo Image' />
                     </Center>
                     <Spacer />
                     <Center className='index-text--content' flexDirection='column'>

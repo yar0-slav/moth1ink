@@ -21,14 +21,14 @@ const Meetmoth = () => {
                         <Text pr={{base: "0", md: '25px'}} mb={{base: "1em", md: '0'}}>
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce et faucibus est. Pellentesque
                             bibendum lobortis neque, a dictum dui placerat in. Cras bibendum imperdiet lectus in
-                            volutpat. Phasellus sed condimentum lectus. Vestibulum magna felis, euismod quis sem eu,
+                            volutpat. Phasellus sed condimentum lectus. Vestibulum magna felis, euismod quis sem eu,1
                             ullamcorper accumsan sem. Maecenas eget laoreet quam, in tempus sapien. Nulla ac rhoncus
                             tortor. Mauris eleifend scelerisque dolor et porttitor. Curabitur a lectus lacus. Nam
                             facilisis ultrices viverra. Pellentesque quis felis sit amet magna pellentesque ullamcorper.
                             Vestibulum et fermentum neque.
                         </Text>
                         <Box>
-                            <Image maxW={{base: "100%", md: '300px'}}display='inline-block' src='/moth-ink.png'></Image>
+                            <Image maxW={{base: "100%", md: '300px'}}display='inline-block' src='/moth-ink.png' alt='Moth1nk Profile Picture'></Image>
                         </Box>
                     </Box>
                     <Flex>

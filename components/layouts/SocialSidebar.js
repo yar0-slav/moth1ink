@@ -9,12 +9,10 @@ import Image from 'next/image'
 
 
 
-const SocialSidebar = props => {
+const SocialSidebar = () => {
     const insta = `/socials/instagram-white.png`
     const facebook = `/socials/facebook-white.png`
     const twitter = `/socials/twitter-white.png`
-
-    const { path } = props
 
     return (
         <Box
