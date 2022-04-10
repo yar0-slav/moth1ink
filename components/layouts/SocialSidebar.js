@@ -38,7 +38,7 @@ const SocialSidebar = () => {
                     <Box position="relative" w="18px" h='18px'>
                             <Link href='https://www.instagram.com/moth.1nk/' isExternal>
                                 <Image
-                                    alt='Mountains'
+                                    alt='instagram'
                                     src={insta}
                                     objectFit="contain"
                                     width="100%"
@@ -51,7 +51,7 @@ const SocialSidebar = () => {
                     <Box position="relative" w="18px" h='18px'>
                         <Link href='https://www.facebook.com/TattooDominica/' isExternal>
                             <Image
-                                alt='Mountains'
+                                alt='facebook'
                                 src={facebook}
                                 objectFit="contain"
                                 width="100%"
@@ -64,7 +64,7 @@ const SocialSidebar = () => {
                     <Box position="relative" w="18px" h='18px'>
                         <Link href='https://twitter.com/Moth1nk' isExternal>
                             <Image
-                                alt='Mountains'
+                                alt='twitter'
                                 src={twitter}
                                 objectFit="contain"
                                 width="100%"
