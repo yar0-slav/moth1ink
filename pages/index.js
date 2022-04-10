@@ -10,7 +10,6 @@ import {gsap} from "gsap/dist/gsap";
 import {ScrollTrigger} from "gsap/dist/ScrollTrigger";
 import {useEffect} from 'react'
 
-import {CopyToClipboard} from 'react-copy-to-clipboard';
 import React, {useRef, useState} from 'react';
 
 
