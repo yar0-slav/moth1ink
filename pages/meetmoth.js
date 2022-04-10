@@ -43,7 +43,7 @@ const Meetmoth = () => {
             </Section>
             <style global jsx>{`
               .background-color--change {
-                background: black;
+                background-color: black !important;
               }
             `}</style>
         </Container>
