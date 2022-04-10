@@ -1,0 +1,20 @@
+.socials_sidebar {
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+}
+
+body {
+    overflow-y: scroll;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+
+body::-webkit-scrollbar { /* WebKit */
+    width: 0;
+    height: 0;
+}
+
+.object_three > canvas:nth-child(2){
+    display: none !important;
+    visibility: 0 !important;
+  }
