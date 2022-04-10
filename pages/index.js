@@ -172,7 +172,7 @@ const Page = () => {
             <Container maxW='container.md' p={0} my='26vh'>
                 <Box textAlign='center' mb={8 * 2 }>
                     <Heading as='h1' size='4xl'>
-                        Let's get weird
+                        Lets get weird
                     </Heading>
                 </Box>
                 <Flex
