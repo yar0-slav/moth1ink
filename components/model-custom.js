@@ -14,7 +14,7 @@ const VoxelDog = () => {
     const [loading, setLoading] = useState(true)
     const [renderer, setRenderer] = useState()
     const [_camera, setCamera] = useState()
-    const [target] = useState(new THREE.Vector3(-0.5, 1.2, 0))
+    const [target] = useState(new THREE.Vector3(0, 0, 0))
     const [initialCameraPosition] = useState(
         new THREE.Vector3(
             20 * Math.sin(0.2 * Math.PI),
@@ -42,6 +42,7 @@ const VoxelDog = () => {
         if (container && !renderer) {
             const scW = container.clientWidth
             const scH = container.clientHeight
+            console.log(scH);
 
             const renderer = new THREE.WebGLRenderer({
                 antialias: true,
@@ -55,7 +56,7 @@ const VoxelDog = () => {
 
             // 640 -> 240
             // 8   -> 6
-            const scale = scH * 0.005 + 4.8
+            const scale = 0.4
             const camera = new THREE.OrthographicCamera(
                 -scale,
                 scale,
@@ -76,7 +77,7 @@ const VoxelDog = () => {
             controls.target = target
             setControls(controls)
 
-            loadGLTFModel(scene, '/dog.glb', {
+            loadGLTFModel(scene, '/Persian.glb', {
                 receiveShadow: false,
                 castShadow: false
             }).then(() => {

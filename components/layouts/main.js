@@ -1,11 +1,11 @@
 import Head from 'next/head'
 import Navbar from "../navbar";
-import {Box, Container,useColorModeValue } from '@chakra-ui/react'
+import {Box, Container } from '@chakra-ui/react'
 
 const Main = ({ children, router }) => {
 
         return (
-        <Box as="main" className="background-color--change" bg={useColorModeValue("#FF005C","#000" )} pb={8}>
+        <Box as="main" className="background-color--change" bg='#FF005C' pb={8}>
             <Head>
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <meta name="description" content="Moth1nk Tattoo" />

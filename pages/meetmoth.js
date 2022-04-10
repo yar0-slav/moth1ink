@@ -9,6 +9,15 @@ const Meetmoth = () => {
                    alignItems='center'>
             <Section>
                 <Box px={{base: '0px', md: '10px'}} py={{base: '0px', md: '5px'}} display='flex' flexDirection='column'>
+                    <Flex mb={5}>
+                        <NextLink href='/'>
+                            <Button leftIcon={<ArrowBackIcon/>} colorScheme='moth' variant='solid' size='md'>
+                                <Link>
+                                    Take me back
+                                </Link>
+                            </Button>
+                        </NextLink>
+                    </Flex>
                     <Heading as='h3' size='3xl' mb={5}>
                         Hey, I am Dominika!
                     </Heading>
@@ -28,22 +37,15 @@ const Meetmoth = () => {
                             Vestibulum et fermentum neque.
                         </Text>
                         <Box>
-                            <Image maxW={{base: "100%", md: '300px'}}display='inline-block' src='/moth-ink.png' alt='Moth1nk Profile Picture'></Image>
+                            <Image maxW={{base: "100%", md: '300px'}} display='inline-block' src='/moth-ink.png'
+                                   alt='Moth1nk Profile Picture'></Image>
                         </Box>
                     </Box>
-                    <Flex>
-                        <Button leftIcon={<ArrowBackIcon/>} colorScheme='moth' variant='solid' size='md'>
-                            <NextLink href='/'>
-                                <Link>
-                                    Take me back</Link>
-                            </NextLink>
-                        </Button>
-                    </Flex>
                 </Box>
             </Section>
             <style global jsx>{`
               .background-color--change {
-                background-color: black !important;
+                background-color: black;
               }
             `}</style>
         </Container>

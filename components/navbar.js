@@ -17,7 +17,8 @@ const LinkItem = ({ href, path, target, children, ...props }) => {
             <Link
                 p={2}
                 bg={active ? 'grassTeal' : undefined}
-                color={active ? '#202023' : inactiveColor}
+                color={active ? '#fff' : inactiveColor}
+                textDecoration={active ? 'underline' : 'none'}
                 target={target}
                 {...props}
             >
@@ -35,13 +36,14 @@ const Navbar = props => {
             position="fixed"
             as="nav"
             w="100%"
-            color={useColorModeValue('#fff', '#000')}
+            color='#fff'
+            backgroundColor='rgba(0,0,0,0)'
+            backdropFilter='blur(20px)'
             zIndex={1}
             {...props}
         >
             <Container
                 display="flex"
-                p={2}
                 maxW="container.lg"
             >
                 <Stack
@@ -52,7 +54,7 @@ const Navbar = props => {
                     justify="right"
                     flexGrow={1}
                 >
-                    <LinkItem href="/meetmoth" path={path}>
+                    <LinkItem href="/meetmoth" path={path} px={0}>
                         Meet Moth
                     </LinkItem>
 
