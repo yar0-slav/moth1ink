@@ -40,7 +40,6 @@ const SocialSidebar = () => {
                                 <Image
                                     alt='instagram'
                                     src={insta}
-                                    objectFit="contain"
                                     width="100%"
                                     height="100%"
                                     layout="responsive"
@@ -53,7 +52,6 @@ const SocialSidebar = () => {
                             <Image
                                 alt='facebook'
                                 src={facebook}
-                                objectFit="contain"
                                 width="100%"
                                 height="100%"
                                 layout="responsive"
@@ -66,7 +64,6 @@ const SocialSidebar = () => {
                             <Image
                                 alt='twitter'
                                 src={twitter}
-                                objectFit="contain"
                                 width="100%"
                                 height="100%"
                                 layout="responsive"
