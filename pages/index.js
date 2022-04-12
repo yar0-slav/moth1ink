@@ -1,10 +1,10 @@
-import {Container, Box, Heading, Flex, Center, Spacer, Image, HStack, Text, Button} from '@chakra-ui/react';
+import {Container, Box, Heading, Flex, Center, Spacer, Image, HStack, Text, Button, Link} from '@chakra-ui/react';
 import {CopyIcon, CheckIcon} from '@chakra-ui/icons'
 import dynamic from 'next/dynamic'
 import Section from "../components/section";
 
 import VoxelDogLoader from '../components/model-loader'
-import SocialSidebar from "../components/layouts/SocialSidebar";
+import SocialSidebar from "../components/SocialSidebar";
 
 import {gsap} from "gsap/dist/gsap";
 import {ScrollTrigger} from "gsap/dist/ScrollTrigger";
@@ -26,18 +26,18 @@ const Page = () => {
             gsap.registerPlugin(ScrollTrigger);
         }
 
-        gsap.set(".background-color--change", {clearProps: true});
+        gsap.set("body", {backgroundColor: '#FF005C',});
 
         ScrollTrigger.create({
             trigger: '.second-container',
             start: 'top 75%',
             onEnter: () =>
-                gsap.to('.background-color--change', {
+                gsap.to('body', {
                     backgroundColor: '#000',
                     color: '#fff',
                 }),
             onLeaveBack: () =>
-                gsap.to('.background-color--change', {
+                gsap.to('body', {
                     backgroundColor: '#FF005C',
                     color: '#000'
                 })
@@ -76,6 +76,21 @@ const Page = () => {
 
     }, [])
 
+
+
+        ScrollTrigger.create({
+            trigger: '.object_three',
+            start: 'top 50%',
+            end: 'bottom 50%',
+            onEnter: () => gsap.to('.object_three', {opacity: 1}),
+            onLeave: () => gsap.to('.object_three', {opacity: 0}),
+            onLeaveBack: () => gsap.to('.object_three', {opacity: 0}),
+            onEnterBack: () => gsap.to('.object_three', {opacity: 1}),
+        });
+
+
+
+
     const [copySuccess, setCopySuccess] = useState('');
     const textAreaRef = useRef(null);
 
@@ -93,8 +108,6 @@ const Page = () => {
 
     function copyToClipboard() {
         setClipboard(textAreaRef.current.innerHTML);
-        // This is just personal preference.
-        // I prefer to not show the the whole text area selected.
     };
 
     return (
@@ -104,7 +117,7 @@ const Page = () => {
                     <Heading as='h1' size='4xl'>
                         Hi, I am Moth,
                     </Heading>
-                    <Heading as={'h3'} mb={10} pt={'3'} fontWeight={'400'}>
+                    <Heading as={'h3'} mb={7} pt={'3'} fontWeight={'400'}>
                         your tattoo artist.
                     </Heading>
                     <SocialSidebar/>
@@ -192,6 +205,22 @@ const Page = () => {
                         <Button onClick={copyToClipboard} leftIcon={copySuccess ? <CheckIcon/> : <CopyIcon/>}
                                 colorScheme={copySuccess ? 'mothGreen' : "moth"}
                                 variant='solid'>{copySuccess ? 'Email Copied' : 'Copy email'}</Button>
+                    </Box>
+                    <Text my={5}>
+                        or DMs
+                    </Text>
+                    <Box position='relative' w='5em'h='5em'>
+                        <Link href='https://www.instagram.com/moth.1nk/' isExternal>
+                            <Image
+                                alt='instagram'
+                                src='/socials/instagram-white.png'
+                                width='100%'
+                                height='100%'
+                                layout='responsive'
+                                objectFit='contain'
+                                _hover={{ filter: "opacity(0.5) drop-shadow(0px 0px #e60053) saturate(8)" }}
+                            />
+                        </Link>
                     </Box>
                 </Flex>
             </Container>

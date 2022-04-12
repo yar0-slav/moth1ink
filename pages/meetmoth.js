@@ -19,7 +19,7 @@ const Meetmoth = () => {
                         </NextLink>
                     </Flex>
                     <Heading as='h3' size='3xl' mb={5}>
-                        Hey, I am Dominika!
+                        Something something,
                     </Heading>
                     <Box
                         display={{base: 'inital', md: 'flex'}}
@@ -28,7 +28,7 @@ const Meetmoth = () => {
                         mb={5}
                     >
                         <Text pr={{base: "0", md: '25px'}} mb={{base: "1em", md: '0'}}>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce et faucibus est. Pellentesque
+                            lorem ipsum dolor sit amet. consectetur adipiscing elit. Fusce et faucibus est. Pellentesque
                             bibendum lobortis neque, a dictum dui placerat in. Cras bibendum imperdiet lectus in
                             volutpat. Phasellus sed condimentum lectus. Vestibulum magna felis, euismod quis sem eu,1
                             ullamcorper accumsan sem. Maecenas eget laoreet quam, in tempus sapien. Nulla ac rhoncus

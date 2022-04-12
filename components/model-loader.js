@@ -1,5 +1,6 @@
-import { forwardRef } from 'react'
+import React, { forwardRef } from 'react'
 import { Box, Spinner } from '@chakra-ui/react'
+import  Hint  from "./hint";
 
 export const DogSpinner = () => (
     <Spinner
@@ -17,12 +18,16 @@ export const DogContainer = forwardRef(({ children }, ref) => (
         ref={ref}
         m="auto"
         className='object_three'
-        w={[280, 480, 700]}
-        h={[280, 480, 700]}
+        w={[320, 480, 620]}
+        h={[320, 480, 620]}
         position="relative"
         >
         {children}
+        <Box pos='absolute' bottom='15px' left='15px'>
+            <Hint />
+        </Box>
     </Box>
+
 ))
 
 const Loader = () => {
