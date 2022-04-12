@@ -22,7 +22,7 @@ const Hint = () => {
 
     return (
 
-        <Popover closeOnBlur={false} placement='top-start' initialFocusRef={initRef} closeOnBlur={true} onClose={close} isOpen={isOpen}>
+        <Popover closeOnBlur={false} placement='top-start' initialFocusRef={initRef} onClose={close} isOpen={isOpen}>
             {({ isOpen}) => (
                 <>
                     <PopoverTrigger>
