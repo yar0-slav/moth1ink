@@ -16,8 +16,8 @@ const SocialSidebar = () => {
     return (
 
         <Box
-            as='aside'
-            position={{base: 'block', md: 'absolute'}}
+            as='div'
+            position='block'
             right={{base: undefined, md: '-20px'}}
             bottom='0'
             mb={5}
@@ -25,16 +25,11 @@ const SocialSidebar = () => {
         >
             <Container p={0} maxW='container.xl'>
                 <Box
-                    flexDirection={{base: 'row', md: 'column'}}
+                    flexDirection='row'
                     display='flex'
                     alignItems='center'
                     justify='flex-start'
-                    flexGrow={1}
-                    spacing={{base: '25px', md: '15px'}}
                 >
-                    <Text className='socials_sidebar' display={{base: 'none', md:'block'}} mb={3}>
-                        Socials
-                    </Text>
                     <Box position='relative' w={{base: '30px', md: '18px'}} h={{base: '35px', md: '18px'}}>
                             <Link href='https://www.instagram.com/moth.1nk/' isExternal>
                                 <Image
@@ -47,7 +42,7 @@ const SocialSidebar = () => {
                                 />
                             </Link>
                     </Box>
-                    <Box position='relative' w={{base: '30px', md: '18px'}} h={{base: '35px', md: '18px'}} mx={5} my={3}>
+                    <Box position='relative' w={{base: '30px', md: '18px'}} h={{base: '35px', md: '18px'}} mx={3} my={3}>
                         <Link href='https://www.facebook.com/TattooDominica/' isExternal>
                             <Image
                                 alt='facebook'
