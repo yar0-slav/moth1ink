@@ -75,13 +75,13 @@ const Page = () => {
         });
 
         ScrollTrigger.create({
-            trigger: '.object_three',
+            trigger: '.first_section',
             start: 'top 50%',
             end: 'bottom 50%',
-            onEnter: () => gsap.to('.object_three', {opacity: 1}),
-            onLeave: () => gsap.to('.object_three', {opacity: 0}),
-            onLeaveBack: () => gsap.to('.object_three', {opacity: 0}),
-            onEnterBack: () => gsap.to('.object_three', {opacity: 1}),
+            onEnter: () => gsap.to('.first_section', {opacity: 1}),
+            onLeave: () => gsap.to('.first_section', {opacity: 0}),
+            onLeaveBack: () => gsap.to('.first_section', {opacity: 0}),
+            onEnterBack: () => gsap.to('.first_section', {opacity: 1}),
         });
 
     }, [])
@@ -111,7 +111,7 @@ const Page = () => {
     return (
         <Container className='index__content' maxW={"container.lg"} p={0}>
             <Section>
-                <Box borderRadius={"lg"} position='relative'>
+                <Box className='first_section' borderRadius={"lg"} position='relative'>
                     <Heading as='h1' size='4xl'>
                         Hi, I am Moth,
                     </Heading>
