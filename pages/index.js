@@ -74,10 +74,6 @@ const Page = () => {
 
         });
 
-    }, [])
-
-
-
         ScrollTrigger.create({
             trigger: '.object_three',
             start: 'top 50%',
@@ -87,6 +83,8 @@ const Page = () => {
             onLeaveBack: () => gsap.to('.object_three', {opacity: 0}),
             onEnterBack: () => gsap.to('.object_three', {opacity: 1}),
         });
+
+    }, [])
 
 
 
