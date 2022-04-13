@@ -1,4 +1,4 @@
-import {Container, Box, Heading, Flex, Center, Image, Stack, Text, Button, Link} from '@chakra-ui/react';
+import {Container, Box, Heading, Flex, Center, Image, Text, Button, Link} from '@chakra-ui/react';
 import {CopyIcon, CheckIcon} from '@chakra-ui/icons'
 import dynamic from 'next/dynamic'
 import Section from "../components/section";
