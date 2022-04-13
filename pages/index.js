@@ -1,4 +1,4 @@
-import {Container, Box, Heading, Flex, Center, Spacer, Image, HStack, Text, Button, Link} from '@chakra-ui/react';
+import {Container, Box, Heading, Flex, Center, Image, Stack, Text, Button, Link} from '@chakra-ui/react';
 import {CopyIcon, CheckIcon} from '@chakra-ui/icons'
 import dynamic from 'next/dynamic'
 import Section from "../components/section";
@@ -66,7 +66,7 @@ const Page = () => {
                 ease: "none",
                 scrollTrigger: {
                     trigger: elem,
-                    start: "top 50%", // the default values
+                    start: "top 50%",
                     end: 'bottom 50%',
                     scrub: 1
                 },
@@ -106,7 +106,7 @@ const Page = () => {
 
     function copyToClipboard() {
         setClipboard(textAreaRef.current.innerHTML);
-    };
+    }
 
     return (
         <Container className='index__content' maxW={"container.lg"} p={0}>
@@ -123,65 +123,63 @@ const Page = () => {
                 </Box>
             </Section>
 
-            <Container maxW="container.lg" mt='30vh' px={0} className="second-container opacity-container">
+            <Container maxW="container.lg" mt='30vh' px={0} className="second-container opacity-container" justifyContent='space-between'>
                 <Flex
                     flexDirection={{base: 'column', md: 'row'}}
                 >
-                    <Center className='index-text--content' flexDirection='column'>
+                    <Center className='index-text--content' flexDirection='column' px={10}>
                         <Heading as='h1' size='4xl'>Precise lines.</Heading>
                         <Heading as='h4' size='lg' fontWeight={'400'}>Are what make or break a tattoo.</Heading>
                     </Center>
-                    <Spacer/>
                     <Center>
                         <Image src='/image6.png' alt='Tattoo Image'/>
                     </Center>
                 </Flex>
             </Container>
 
-            <Container maxW="container.lg" mt='35vh' px={0} className="third-container opacity-container">
+            <Container maxW="container.lg" mt='35vh' px={0} className="third-container opacity-container" justifyContent='space-between'>
                 <Flex
                     flexDirection={{base: 'column', md: 'row'}}
                 >
-                    <Center>
+                    <Center order={{base: '2', md: 'initial'}}>
                         <Image src='/image6.png' alt='Tattoo Image'/>
                     </Center>
-                    <Spacer/>
-                    <Center className='index-text--content' flexDirection='column'>
+                    <Center className='index-text--content' flexDirection='column'  px={10} order={{base: '1', md:'initial'}}>
                         <Heading as='h1' size='4xl'>Precise lines.</Heading>
                         <Heading as='h4' size='lg' fontWeight={'400'}>Are what make or break a tattoo.</Heading>
                     </Center>
                 </Flex>
             </Container>
 
-            <Container maxW="container.lg" mt='35vh' className="fourth-container opacity-container">
+            <Container maxW="container.lg" mt='35vh' className="fourth-container opacity-container " >
                 <Flex
                     flexDirection='column'
                     mb={10}
                 >
-                    <Center flexDirection='column'>
+                    <Center className='index-text--content' flexDirection='column' py={8}>
                         <Heading as='h1' size='4xl'>Precise lines.</Heading>
                         <Heading as='h4' size='lg' fontWeight={'400'}>Are what make or break a tattoo.</Heading>
                     </Center>
 
-                    <HStack
+                    <Box
                         direction={{base: 'row', md: 'column'}}
                         display='flex'
                         alignItems="center"
                         justify="center"
-                        spacing='3px'
+                        justifyContent='space-between'
                         flexWrap='wrap'
                     >
                         <Image w={{base: '100%', md: '33%'}} src='/image6.png'/>
-                        <Image w={{base: '100%', md: '33%'}} src='/image6.png'/>
+                        <Image w={{base: '100%', md: '33%'}} my={2} src='/image6.png'/>
                         <Image w={{base: '100%', md: '33%'}} src='/image6.png'/>
 
-                    </HStack>
+                    </Box>
                 </Flex>
 
             </Container>
 
             <Container maxW='container.md' p={0} my='26vh'>
-                <Box textAlign='center' mb={8 * 2 }>
+                <Box textAlign='center' mb={8 * 2}>
                     <Heading as='h1' size='4xl'>
                         Lets get weird
                     </Heading>
@@ -196,7 +194,8 @@ const Page = () => {
                             Hit me up and dissapoint your mom.
                         </Heading>
                     </Box>
-                    <Box p={7} border={'solid'} display='flex' flexDirection='column' borderRadius='15px' borderColor={copySuccess ? '#22f640' : undefined}>
+                    <Box p={7} border={'solid'} display='flex' flexDirection='column' borderRadius='15px'
+                         borderColor={copySuccess ? '#22f640' : undefined}>
                         <Text alignSelf='center' ref={textAreaRef} mb={2} color={copySuccess ? '#22f640' : undefined}>
                             moth.1nk.666@gmail.com
                         </Text>
@@ -207,7 +206,7 @@ const Page = () => {
                     <Text my={5}>
                         or DMs
                     </Text>
-                    <Box position='relative' w='5em'h='5em'>
+                    <Box position='relative' w='5em' h='5em'>
                         <Link href='https://www.instagram.com/moth.1nk/' isExternal>
                             <Image
                                 alt='instagram'
@@ -216,7 +215,7 @@ const Page = () => {
                                 height='100%'
                                 layout='responsive'
                                 objectFit='contain'
-                                _hover={{ filter: "opacity(0.5) drop-shadow(0px 0px #e60053) saturate(8)" }}
+                                _hover={{filter: "opacity(0.5) drop-shadow(0px 0px #e60053) saturate(8)"}}
                             />
                         </Link>
                     </Box>
@@ -224,7 +223,7 @@ const Page = () => {
             </Container>
 
         </Container>
-    )
+    );
 }
 
 export default Page

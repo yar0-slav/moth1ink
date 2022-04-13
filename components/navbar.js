@@ -18,6 +18,7 @@ const LinkItem = ({ href, path, target, children, ...props }) => {
                 p={2}
                 bg={active ? 'grassTeal' : undefined}
                 color={active ? '#fff' : inactiveColor}
+                boxShadow='none !important'
                 textDecoration={active ? 'underline' : 'none'}
                 target={target}
                 {...props}
