@@ -272,7 +272,8 @@ export async function getStaticProps() {
         expression: 'folder=""'
     });
 
-    const {resources, next_cursor: nextCursor, total_count: totalCount} = results;
+    const {resources, next_cursor: nextCursor} = results;
+    const {total_count: totalCount} = JSON.stringify(results)
 
     const images = mapImageResources(resources)
 
@@ -284,7 +285,7 @@ export async function getStaticProps() {
             images: images || false,
             nextCursor: nextCursor || false,
             folders: folders || false,
-            totalCount
+            totalCount: totalCount || false
         }
     }
 
