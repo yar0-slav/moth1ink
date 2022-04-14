@@ -22,15 +22,15 @@ const LazyVoxelDog = dynamic(() => import('../components/model-custom'), {
     loading: () => <VoxelDogLoader/>
 })
 
-const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders}) => {
+const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, totalCount: defaultTotalCount}) => {
 
     const [copySuccess, setCopySuccess] = useState('');
     const textAreaRef = useRef(null);
 
     const [images, setImages] = useState(defaultImages)
     const [nextCursor, setNextCursor] = useState(defaultNextCursor)
+    const [totalCount, setTotalCount] = useState(defaultTotalCount);
     const [activeFolder, setActiveFolder] = useState('')
-    console.log(activeFolder)
 
     useEffect(() => {
 
@@ -106,11 +106,11 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders}) =
             method: 'POST',
             body: JSON.stringify({
                 nextCursor,
-                expression: `folder="${activeFolder}"`
+                expression: `folder=""`
             })
         }).then(r => r.json());
 
-        const {resources, next_cursor: updatedNextCursor} = results;
+        const {resources, next_cursor: updatedNextCursor,  total_count: updatedTotalCount} = results;
 
         const images = mapImageResources(resources)
 
@@ -122,6 +122,7 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders}) =
         })
 
         setNextCursor(updatedNextCursor)
+        setTotalCount(updatedTotalCount);
     }
 
     function setClipboard(text) {
@@ -144,7 +145,8 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders}) =
         const folderPath = event.target.dataset.folderPath;
         setActiveFolder(folderPath)
         setNextCursor(undefined)
-        setImages([]);
+        setImages([])
+        setTotalCount(0)
     }
 
     useEffect(() => {
@@ -152,26 +154,19 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders}) =
             const results = await fetch('/api/search', {
                 method: 'POST',
                 body: JSON.stringify({
-                    nextCursor,
-                    expression: `folder="${activeFolder}"`
+                    expression: `folder="${activeFolder || ''}"`
                 })
             }).then(r => r.json());
 
-            const {resources, next_cursor: updatedNextCursor} = results;
+            const { resources, next_cursor: nextPageCursor, total_count: updatedTotalCount } = results;
 
-            const images = mapImageResources(resources)
-
-            setImages(prev => {
-                return [
-                    ...prev,
-                    ...images
-                ]
-            })
+            const images = mapImageResources(resources);
 
             setImages(images);
-            setNextCursor(updatedNextCursor)
-        })()
-    }, [activeFolder, nextCursor])
+            setNextCursor(nextPageCursor);
+            setTotalCount(updatedTotalCount);
+        })();
+    }, [activeFolder]);
 
     return (
         <Container className='index__content' maxW={"container.lg"} p={0}>
@@ -188,36 +183,38 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders}) =
                 </Box>
             </Section>
 
-            {/*<Container maxW="container.lg" mt='30vh' px={0} className="second-container opacity-container" justifyContent='space-between'>*/}
-            {/*    <Box onClick={handleOnFolderClick}>*/}
-            {/*        <Box key='""'>*/}
-            {/*            <Button as='h1' data-folder-path='""'>Tattoos</Button>*/}
-            {/*        </Box>*/}
-            {/*        {folders && folders.map(folder => {*/}
-            {/*            return (*/}
-            {/*                <Box key={folder.path}>*/}
-            {/*                    <Button as='h1' data-folder-path={folder.path}>{folder.name}</Button>*/}
-            {/*                </Box>*/}
-            {/*            )*/}
-            {/*        })}*/}
-            {/*    </Box>*/}
-            {/*    <Masonry*/}
-            {/*        breakpointCols={3}*/}
-            {/*        className="my-masonry-grid"*/}
-            {/*        columnClassName="my-masonry-grid_column"*/}
-            {/*    >*/}
-            {/*        {images && images.map(image => {*/}
-            {/*            return (*/}
-            {/*                <Image src={image.src} width={image.width} height={image.height} alt={image.title}*/}
-            {/*                       key={image.id}/>*/}
-            {/*            )*/}
-            {/*        })}*/}
-            {/*    </Masonry>*/}
-            {/*    <Button onClick={handleLoadMore}>*/}
-            {/*        Load more*/}
-            {/*    </Button>*/}
-
-            {/*</Container>*/}
+            <Container maxW="container.lg" mt='30vh' px={0} className="second-container opacity-container" justifyContent='space-between'>
+                <Box onClick={handleOnFolderClick}>
+                    <Box key='""'>
+                        <Button as='h1' data-folder-path='""'>Tattoos</Button>
+                    </Box>
+                    {folders && folders.map(folder => {
+                        const isActive = folder.path === activeFolder;
+                        return (
+                            <Box key={folder.path} data-active-folder={isActive}>
+                                <Button as='h1' data-folder-path={folder.path}>{folder.name}</Button>
+                            </Box>
+                        )
+                    })}
+                </Box>
+                <Masonry
+                    breakpointCols={3}
+                    className="my-masonry-grid"
+                    columnClassName="my-masonry-grid_column"
+                >
+                    {images && images.map(image => {
+                        return (
+                            <Image src={image.src} width={image.width} height={image.height} alt={image.title}
+                                   key={image.id}/>
+                        )
+                    })}
+                </Masonry>
+                {totalCount > images.length && (
+                    <Button onClick={handleLoadMore}>
+                        Load more
+                    </Button>
+                )}
+            </Container>
 
             <Container maxW='container.md' p={0} my='26vh'>
                 <Box textAlign='center' mb={8 * 2}>
@@ -275,19 +272,19 @@ export async function getStaticProps() {
         expression: 'folder=""'
     });
 
-    const {resources, next_cursor: nextCursor} = results;
+    const {resources, next_cursor: nextCursor, total_count: totalCount} = results;
 
     const images = mapImageResources(resources)
 
     const {folders} = await getFolders();
 
-    console.log(folders)
 
     return {
         props: {
             images,
             nextCursor: nextCursor || false,
-            folders
+            folders,
+            totalCount
         }
     }
 
