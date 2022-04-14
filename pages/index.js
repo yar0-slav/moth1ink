@@ -171,7 +171,7 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders}) =
             setImages(images);
             setNextCursor(updatedNextCursor)
         })()
-    }, [activeFolder])
+    }, [activeFolder, nextCursor])
 
     return (
         <Container className='index__content' maxW={"container.lg"} p={0}>
