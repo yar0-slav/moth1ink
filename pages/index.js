@@ -194,7 +194,7 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders}) =
                     <Box key='""'>
                         <Button as='h1' data-folder-path='""'>Tattoos</Button>
                     </Box>
-                    {folders.map(folder => {
+                    {folders && folders.map(folder => {
                         return (
                             <Box key={folder.path}>
                                 <Button as='h1' data-folder-path={folder.path}>{folder.name}</Button>
@@ -207,7 +207,7 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders}) =
                     className="my-masonry-grid"
                     columnClassName="my-masonry-grid_column"
                 >
-                    {images.map(image => {
+                    {images && images.map(image => {
                         return (
                             <Image src={image.src} width={image.width} height={image.height} alt={image.title}
                                    key={image.id}/>
@@ -233,7 +233,7 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders}) =
                 >
                     <Box>
                         <Heading size="md" mb={5}>
-                            Hit me up and dissapoint your mom.
+                            Hit me up and disappoint your mom.
                         </Heading>
                     </Box>
                     <Box p={7} border={'solid'} display='flex' flexDirection='column' borderRadius='15px'
