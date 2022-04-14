@@ -168,6 +168,7 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders}) =
                 ]
             })
 
+            setImages(images);
             setNextCursor(updatedNextCursor)
         })()
     }, [activeFolder])
