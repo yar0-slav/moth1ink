@@ -188,7 +188,7 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, to
                     <Box key='""'>
                         <Button as='h1' data-folder-path='""'>Tattoos</Button>
                     </Box>
-                    {folders
+                    {folders && folders.length > 0
                         ? folders.map(folder => {
                         const isActive = folder.path === activeFolder;
                         return (
@@ -204,7 +204,7 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, to
                     className="my-masonry-grid"
                     columnClassName="my-masonry-grid_column"
                 >
-                    {images
+                    {images && images.length > 0
                     ? images.map(image => {
                         return (
                             <Image src={image.src} width={image.width} height={image.height} alt={image.title}
@@ -285,9 +285,9 @@ export async function getStaticProps() {
 
     return {
         props: {
-            images: images || [],
+            images: images || false,
             nextCursor: nextCursor || false,
-            folders: folders || [],
+            folders: folders || false   ,
             totalCount
         }
     }
