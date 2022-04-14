@@ -188,37 +188,36 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders}) =
                 </Box>
             </Section>
 
-            <Container maxW="container.lg" mt='30vh' px={0} className="second-container opacity-container"
-                       justifyContent='space-between'>
-                <Box onClick={handleOnFolderClick}>
-                    <Box key='""'>
-                        <Button as='h1' data-folder-path='""'>Tattoos</Button>
-                    </Box>
-                    {folders && folders.map(folder => {
-                        return (
-                            <Box key={folder.path}>
-                                <Button as='h1' data-folder-path={folder.path}>{folder.name}</Button>
-                            </Box>
-                        )
-                    })}
-                </Box>
-                <Masonry
-                    breakpointCols={3}
-                    className="my-masonry-grid"
-                    columnClassName="my-masonry-grid_column"
-                >
-                    {images && images.map(image => {
-                        return (
-                            <Image src={image.src} width={image.width} height={image.height} alt={image.title}
-                                   key={image.id}/>
-                        )
-                    })}
-                </Masonry>
-                <Button onClick={handleLoadMore}>
-                    Load more
-                </Button>
+            {/*<Container maxW="container.lg" mt='30vh' px={0} className="second-container opacity-container" justifyContent='space-between'>*/}
+            {/*    <Box onClick={handleOnFolderClick}>*/}
+            {/*        <Box key='""'>*/}
+            {/*            <Button as='h1' data-folder-path='""'>Tattoos</Button>*/}
+            {/*        </Box>*/}
+            {/*        {folders && folders.map(folder => {*/}
+            {/*            return (*/}
+            {/*                <Box key={folder.path}>*/}
+            {/*                    <Button as='h1' data-folder-path={folder.path}>{folder.name}</Button>*/}
+            {/*                </Box>*/}
+            {/*            )*/}
+            {/*        })}*/}
+            {/*    </Box>*/}
+            {/*    <Masonry*/}
+            {/*        breakpointCols={3}*/}
+            {/*        className="my-masonry-grid"*/}
+            {/*        columnClassName="my-masonry-grid_column"*/}
+            {/*    >*/}
+            {/*        {images && images.map(image => {*/}
+            {/*            return (*/}
+            {/*                <Image src={image.src} width={image.width} height={image.height} alt={image.title}*/}
+            {/*                       key={image.id}/>*/}
+            {/*            )*/}
+            {/*        })}*/}
+            {/*    </Masonry>*/}
+            {/*    <Button onClick={handleLoadMore}>*/}
+            {/*        Load more*/}
+            {/*    </Button>*/}
 
-            </Container>
+            {/*</Container>*/}
 
             <Container maxW='container.md' p={0} my='26vh'>
                 <Box textAlign='center' mb={8 * 2}>
