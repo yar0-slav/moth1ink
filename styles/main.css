@@ -18,6 +18,23 @@ body::-webkit-scrollbar { /* WebKit */
     transition: box-shadow ease-in-out .33s;
 }
 
+.my-masonry-grid_column {
+    padding-left: 30px;
+    background-clip: padding-box;
+}
+
+.my-masonry-grid {
+    position: relative;
+    width: auto;
+    min-height: 10vh;
+    margin-left: -30px;
+    display: flex;
+}
+
+.my-masonry-grid_column > img {
+    margin-bottom: 15px; /* space between items */
+}
+
 /*.object_three > canvas:nth-child(2){*/
 /*    display: none !important;*/
 /*    visibility: 0 !important;*/

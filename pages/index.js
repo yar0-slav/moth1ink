@@ -1,16 +1,20 @@
-import {Container, Box, Heading, Flex, Center, Image, Text, Button, Link} from '@chakra-ui/react';
+import {Container, Box, Heading, Flex, Text, Button, Link} from '@chakra-ui/react';
+import Masonry from 'react-masonry-css'
 import {CopyIcon, CheckIcon} from '@chakra-ui/icons'
 import dynamic from 'next/dynamic'
 import Section from "../components/section";
 
+import Image from 'next/image'
+
 import VoxelDogLoader from '../components/model-loader'
 import SocialSidebar from "../components/SocialSidebar";
 
+
 import {gsap} from "gsap/dist/gsap";
 import {ScrollTrigger} from "gsap/dist/ScrollTrigger";
-import {useEffect} from 'react'
+import {useEffect, useRef, useState} from 'react'
 
-import React, {useRef, useState} from 'react';
+import {search, mapImageResources, getFolders} from "../lib/cloudinary";
 
 
 const LazyVoxelDog = dynamic(() => import('../components/model-custom'), {
@@ -18,7 +22,15 @@ const LazyVoxelDog = dynamic(() => import('../components/model-custom'), {
     loading: () => <VoxelDogLoader/>
 })
 
-const Page = () => {
+const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders}) => {
+
+    const [copySuccess, setCopySuccess] = useState('');
+    const textAreaRef = useRef(null);
+
+    const [images, setImages] = useState(defaultImages)
+    const [nextCursor, setNextCursor] = useState(defaultNextCursor)
+    const [activeFolder, setActiveFolder] = useState('')
+    console.log(activeFolder)
 
     useEffect(() => {
 
@@ -87,10 +99,31 @@ const Page = () => {
     }, [])
 
 
+    async function handleLoadMore(event) {
+        event.preventDefault()
 
+        const results = await fetch('/api/search', {
+            method: 'POST',
+            body: JSON.stringify({
+                nextCursor,
+                expression: `folder="${activeFolder}"`
+            })
+        }).then(r => r.json());
 
-    const [copySuccess, setCopySuccess] = useState('');
-    const textAreaRef = useRef(null);
+        const {resources, next_cursor: updatedNextCursor} = results;
+
+        const images = mapImageResources(resources)
+
+        setImages(prev => {
+            return [
+                ...prev,
+                ...images
+            ]
+        })
+
+        setNextCursor(updatedNextCursor)
+    }
+
 
     function setClipboard(text) {
         var type = "text/plain";
@@ -108,6 +141,38 @@ const Page = () => {
         setClipboard(textAreaRef.current.innerHTML);
     }
 
+    function handleOnFolderClick(event) {
+        const folderPath = event.target.dataset.folderPath;
+        setActiveFolder(folderPath)
+        setNextCursor(undefined)
+        setImages([]);
+    }
+
+    useEffect(() => {
+        (async function run() {
+            const results = await fetch('/api/search', {
+                method: 'POST',
+                body: JSON.stringify({
+                    nextCursor,
+                    expression: `folder="${activeFolder}"`
+                })
+            }).then(r => r.json());
+
+            const {resources, next_cursor: updatedNextCursor} = results;
+
+            const images = mapImageResources(resources)
+
+            setImages(prev => {
+                return [
+                    ...prev,
+                    ...images
+                ]
+            })
+
+            setNextCursor(updatedNextCursor)
+        })()
+    }, [activeFolder])
+
     return (
         <Container className='index__content' maxW={"container.lg"} p={0}>
             <Section>
@@ -123,58 +188,35 @@ const Page = () => {
                 </Box>
             </Section>
 
-            <Container maxW="container.lg" mt='30vh' px={0} className="second-container opacity-container" justifyContent='space-between'>
-                <Flex
-                    flexDirection={{base: 'column', md: 'row'}}
-                >
-                    <Center className='index-text--content' flexDirection='column' px={10}>
-                        <Heading as='h1' size='4xl'>Precise lines.</Heading>
-                        <Heading as='h4' size='lg' fontWeight={'400'}>Are what make or break a tattoo.</Heading>
-                    </Center>
-                    <Center>
-                        <Image src='/image6.png' alt='Tattoo Image'/>
-                    </Center>
-                </Flex>
-            </Container>
-
-            <Container maxW="container.lg" mt='35vh' px={0} className="third-container opacity-container" justifyContent='space-between'>
-                <Flex
-                    flexDirection={{base: 'column', md: 'row'}}
-                >
-                    <Center order={{base: '2', md: 'initial'}}>
-                        <Image src='/image6.png' alt='Tattoo Image'/>
-                    </Center>
-                    <Center className='index-text--content' flexDirection='column'  px={10} order={{base: '1', md:'initial'}}>
-                        <Heading as='h1' size='4xl'>Precise lines.</Heading>
-                        <Heading as='h4' size='lg' fontWeight={'400'}>Are what make or break a tattoo.</Heading>
-                    </Center>
-                </Flex>
-            </Container>
-
-            <Container maxW="container.lg" mt='35vh' className="fourth-container opacity-container " >
-                <Flex
-                    flexDirection='column'
-                    mb={10}
-                >
-                    <Center className='index-text--content' flexDirection='column' py={8}>
-                        <Heading as='h1' size='4xl'>Precise lines.</Heading>
-                        <Heading as='h4' size='lg' fontWeight={'400'}>Are what make or break a tattoo.</Heading>
-                    </Center>
-
-                    <Box
-                        direction={{base: 'row', md: 'column'}}
-                        display='flex'
-                        alignItems="center"
-                        justify="center"
-                        justifyContent='space-between'
-                        flexWrap='wrap'
-                    >
-                        <Image w={{base: '100%', md: '33%'}} src='/image6.png'/>
-                        <Image w={{base: '100%', md: '33%'}} my={2} src='/image6.png'/>
-                        <Image w={{base: '100%', md: '33%'}} src='/image6.png'/>
-
+            <Container maxW="container.lg" mt='30vh' px={0} className="second-container opacity-container"
+                       justifyContent='space-between'>
+                <Box onClick={handleOnFolderClick}>
+                    <Box key='""'>
+                        <Button as='h1' data-folder-path='""'>Tattoos</Button>
                     </Box>
-                </Flex>
+                    {folders.map(folder => {
+                        return (
+                            <Box key={folder.path}>
+                                <Button as='h1' data-folder-path={folder.path}>{folder.name}</Button>
+                            </Box>
+                        )
+                    })}
+                </Box>
+                <Masonry
+                    breakpointCols={3}
+                    className="my-masonry-grid"
+                    columnClassName="my-masonry-grid_column"
+                >
+                    {images.map(image => {
+                        return (
+                            <Image src={image.src} width={image.width} height={image.height} alt={image.title}
+                                   key={image.id}/>
+                        )
+                    })}
+                </Masonry>
+                <Button onClick={handleLoadMore}>
+                    Load more
+                </Button>
 
             </Container>
 
@@ -227,3 +269,27 @@ const Page = () => {
 }
 
 export default Page
+
+export async function getStaticProps() {
+
+    const results = await search({
+        expression: 'folder=""'
+    });
+
+    const {resources, next_cursor: nextCursor} = results;
+
+    const images = mapImageResources(resources)
+
+    const {folders} = await getFolders();
+
+    console.log(folders)
+
+    return {
+        props: {
+            images,
+            nextCursor: nextCursor || false,
+            folders
+        }
+    }
+
+}

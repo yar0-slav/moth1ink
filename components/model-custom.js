@@ -42,7 +42,6 @@ const VoxelDog = () => {
         if (container && !renderer) {
             const scW = container.clientWidth
             const scH = container.clientHeight
-            console.log(scH);
 
             const renderer = new THREE.WebGLRenderer({
                 antialias: true,
@@ -111,7 +110,6 @@ const VoxelDog = () => {
             }
 
             return () => {
-                console.log('unmount')
                 cancelAnimationFrame(req)
                 renderer.dispose()
             }
