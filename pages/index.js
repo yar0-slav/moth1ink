@@ -22,15 +22,15 @@ const LazyVoxelDog = dynamic(() => import('../components/model-custom'), {
     loading: () => <VoxelDogLoader/>
 })
 
-const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders}) => {
+const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders,totalCount: defaultTotalCount}) => {
 
     const [copySuccess, setCopySuccess] = useState('');
     const textAreaRef = useRef(null);
 
     const [images, setImages] = useState(defaultImages)
     const [nextCursor, setNextCursor] = useState(defaultNextCursor)
+    const [totalCount, setTotalCount] = useState(JSON.stringify(defaultTotalCount));
     const [activeFolder, setActiveFolder] = useState('')
-    console.log(activeFolder)
 
     useEffect(() => {
 
@@ -110,7 +110,7 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders}) =
             })
         }).then(r => r.json());
 
-        const {resources, next_cursor: updatedNextCursor} = results;
+        const {resources, next_cursor: updatedNextCursor,  total_count: updatedTotalCount} = results;
 
         const images = mapImageResources(resources)
 
@@ -122,6 +122,7 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders}) =
         })
 
         setNextCursor(updatedNextCursor)
+        setTotalCount(updatedTotalCount);
     }
 
     function setClipboard(text) {
@@ -144,7 +145,8 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders}) =
         const folderPath = event.target.dataset.folderPath;
         setActiveFolder(folderPath)
         setNextCursor(undefined)
-        setImages([]);
+        setImages([])
+        setTotalCount(0)
     }
 
     useEffect(() => {
@@ -157,7 +159,7 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders}) =
                 })
             }).then(r => r.json());
 
-            const {resources, next_cursor: updatedNextCursor} = results;
+            const {resources, next_cursor: updatedNextCursor, total_count: updatedTotalCount} = results;
 
             const images = mapImageResources(resources)
 
@@ -170,6 +172,7 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders}) =
 
             setImages(images);
             setNextCursor(updatedNextCursor)
+            setTotalCount(updatedTotalCount)
         })()
     }, [activeFolder, nextCursor])
 
@@ -214,9 +217,12 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders}) =
                         )
                     })}
                 </Masonry>
-                <Button onClick={handleLoadMore}>
-                    Load more
-                </Button>
+
+                {totalCount > images.length && (
+                    <Button onClick={handleLoadMore}>
+                        Load more
+                    </Button>
+                )}
 
             </Container>
 
@@ -276,19 +282,19 @@ export async function getStaticProps() {
         expression: 'folder=""'
     });
 
-    const {resources, next_cursor: nextCursor} = results;
+    const {resources, next_cursor: nextCursor, total_count: totalCount} = results
 
     const images = mapImageResources(resources)
 
     const {folders} = await getFolders();
 
-    console.log(folders)
 
     return {
         props: {
             images: images || false,
             nextCursor: nextCursor || false,
-            folders
+            folders: folders || false,
+            totalCount: totalCount || false
         }
     }
 
