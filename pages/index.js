@@ -22,7 +22,7 @@ const LazyVoxelDog = dynamic(() => import('../components/model-custom'), {
     loading: () => <VoxelDogLoader/>
 })
 
-const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders,totalCount: defaultTotalCount}) => {
+const Page = ({images: defaultImages, nextCursor: defaultNextCursor,folders,totalCount: defaultTotalCount}) => {
 
     const [copySuccess, setCopySuccess] = useState('');
     const textAreaRef = useRef(null);
@@ -197,7 +197,7 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders,tot
                     <Box key='""'>
                         <Button as='h1' data-folder-path='""'>Tattoos</Button>
                     </Box>
-                    {folders?.map(folder => {
+                    {folders.map(folder => {
                         return (
                             <Box key={folder.path}>
                                 <Button as='h1' data-folder-path={folder.path}>{folder.name}</Button>
@@ -210,7 +210,7 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders,tot
                     className="my-masonry-grid"
                     columnClassName="my-masonry-grid_column"
                 >
-                    {images?.map(image => {
+                    {images.map(image => {
                         return (
                             <Image src={image.src} width={image.width} height={image.height} alt={image.title}
                                    key={image.id}/>
@@ -285,16 +285,18 @@ export async function getStaticProps() {
     const {resources, next_cursor: nextCursor, total_count: totalCount} = results
 
     const images = mapImageResources(resources)
+    console.log(results)
 
-    const {folders} = await getFolders();
+    const folders = await getFolders();
+    console.log(folders);
 
 
     return {
         props: {
-            images: images || false,
+            images: images,
             nextCursor: nextCursor || false,
-            folders: folders || false,
-            totalCount: totalCount || false
+            folders: folders,
+            totalCount: totalCount,
         }
     }
 
