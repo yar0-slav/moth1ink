@@ -1,4 +1,4 @@
-import {Container, Box, Heading, Flex, Text, Button, Link} from '@chakra-ui/react';
+import {Container, Box, Heading, Flex, Text, Button, Link, Spinner} from '@chakra-ui/react';
 import Masonry from 'react-masonry-css'
 import {CopyIcon, CheckIcon} from '@chakra-ui/icons'
 import dynamic from 'next/dynamic'
@@ -6,13 +6,16 @@ import Section from "../components/section";
 
 import Image from 'next/image'
 
+import Zoom from 'react-medium-image-zoom'
+import 'react-medium-image-zoom/dist/styles.css'
+
 import VoxelDogLoader from '../components/model-loader'
 import SocialSidebar from "../components/SocialSidebar";
 
 
 import {gsap} from "gsap/dist/gsap";
 import {ScrollTrigger} from "gsap/dist/ScrollTrigger";
-import {useEffect, useRef, useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 
 import {search, mapImageResources, getFolders} from "../lib/cloudinary";
 
@@ -22,15 +25,15 @@ const LazyVoxelDog = dynamic(() => import('../components/model-custom'), {
     loading: () => <VoxelDogLoader/>
 })
 
-const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders}) => {
+const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, totalCount: defaultTotalCount}) => {
 
     const [copySuccess, setCopySuccess] = useState('');
     const textAreaRef = useRef(null);
 
     const [images, setImages] = useState(defaultImages)
     const [nextCursor, setNextCursor] = useState(defaultNextCursor)
+    const [totalCount, setTotalCount] = useState(defaultTotalCount);
     const [activeFolder, setActiveFolder] = useState('')
-    console.log(activeFolder)
 
     useEffect(() => {
 
@@ -106,11 +109,11 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders}) =
             method: 'POST',
             body: JSON.stringify({
                 nextCursor,
-                expression: `folder="${activeFolder}"`
+                expression: `folder="${activeFolder || ''}"`
             })
         }).then(r => r.json());
 
-        const {resources, next_cursor: updatedNextCursor} = results;
+        const {resources, next_cursor: updatedNextCursor, total_count: updatedTotalCount} = results;
 
         const images = mapImageResources(resources)
 
@@ -122,8 +125,35 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders}) =
         })
 
         setNextCursor(updatedNextCursor)
+        setTotalCount(updatedTotalCount)
     }
 
+    function handleOnFolderClick(event) {
+        const folderPath = event.target.dataset.folderPath;
+        setActiveFolder(folderPath)
+        setNextCursor(undefined)
+        setImages([]);
+    }
+
+    useEffect(() => {
+        (async function run() {
+            const results = await fetch('/api/search', {
+                method: 'POST',
+                body: JSON.stringify({
+                    nextCursor,
+                    expression: `folder="${activeFolder || ''}"`
+                })
+            }).then(r => r.json());
+
+            const {resources, next_cursor: updatedNextCursor, total_count: updatedTotalCount} = results;
+
+            const images = mapImageResources(resources)
+
+            setImages(images);
+            setNextCursor(updatedNextCursor)
+            setTotalCount(updatedTotalCount)
+        })()
+    }, [activeFolder])
 
     function setClipboard(text) {
         var type = "text/plain";
@@ -141,37 +171,26 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders}) =
         setClipboard(textAreaRef.current.innerHTML);
     }
 
-    function handleOnFolderClick(event) {
-        const folderPath = event.target.dataset.folderPath;
-        setActiveFolder(folderPath)
-        setNextCursor(undefined)
-        setImages([]);
-    }
+    const convertImage = (w, h) => `
+      <svg width="${w}" height="${h}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <defs>
+          <linearGradient id="g">
+            <stop stop-color="#333" offset="20%" />
+            <stop stop-color="#222" offset="50%" />
+            <stop stop-color="#333" offset="70%" />
+          </linearGradient>
+        </defs>
+        <rect width="${w}" height="${h}" fill="#333" />
+        <rect id="r" width="${w}" height="${h}" fill="url(#g)" />
+        <animate xlink:href="#r" attributeName="x" from="-${w}" to="${w}" dur="1s" repeatCount="indefinite"  />
+      </svg>`;
 
-    useEffect(() => {
-        (async function run() {
-            const results = await fetch('/api/search', {
-                method: 'POST',
-                body: JSON.stringify({
-                    nextCursor,
-                    expression: `folder="${activeFolder}"`
-                })
-            }).then(r => r.json());
+    const toBase64 = (str) =>
+        typeof window === 'undefined'
+            ? Buffer.from(str).toString('base64')
+            : window.btoa(str);
 
-            const {resources, next_cursor: updatedNextCursor} = results;
-
-            const images = mapImageResources(resources)
-
-            setImages(prev => {
-                return [
-                    ...prev,
-                    ...images
-                ]
-            })
-
-            setNextCursor(updatedNextCursor)
-        })()
-    }, [activeFolder])
+    console.log(activeFolder.length)
 
     return (
         <Container className='index__content' maxW={"container.lg"} p={0}>
@@ -190,33 +209,59 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders}) =
 
             <Container maxW="container.lg" mt='30vh' px={0} className="second-container opacity-container"
                        justifyContent='space-between'>
-                <Box onClick={handleOnFolderClick}>
+                <Box py='2em' justifyContent='space-around' display='flex' onClick={handleOnFolderClick}>
                     <Box key='""'>
-                        <Button as='h1' data-folder-path='""'>Tattoos</Button>
+                        <Button fontSize='3xl' variant='link' textDecoration={activeFolder.length <= 2 ? 'underline' : 'none'} colorScheme='white' data-folder-path='""'>Tattoos</Button>
                     </Box>
-                    {folders.map(folder => {
-                        return (
-                            <Box key={folder.path}>
-                                <Button as='h1' data-folder-path={folder.path}>{folder.name}</Button>
-                            </Box>
-                        )
-                    })}
+
+                    {
+                        folders.map(folder => {
+                            const active = folder.path === activeFolder
+                            return (
+                                <Box key={folder.path} textDecoration={active ? 'underline' : 'none'}>
+                                    <Button variant='link' fontSize='3xl' colorScheme='white' data-folder-path={folder.path}>{folder.name}</Button>
+                                </Box>
+                            )
+                        })
+                    }
                 </Box>
                 <Masonry
                     breakpointCols={3}
                     className="my-masonry-grid"
                     columnClassName="my-masonry-grid_column"
                 >
-                    {images.map(image => {
-                        return (
-                            <Image src={image.src} width={image.width} height={image.height} alt={image.title}
-                                   key={image.id}/>
-                        )
-                    })}
+                    {
+                        images && images.length > 0 ?
+                            images.map(image => {
+                                return (
+                                    <Zoom key={image.id}>
+                                        <Image src={image.src} width={image.width} height={image.height}
+                                               alt={image.title}
+                                               key={image.id}
+                                               placeholder="blur"
+                                               blurDataURL={`data:image/svg+xml;base64,${toBase64(
+                                                   convertImage(`${image.width}`, `${image.height}`)
+                                               )}`}
+                                        />
+                                    </Zoom>
+                                )
+
+                            })
+                            : <Spinner
+                                size="xl"
+                                position="absolute"
+                                left="50%"
+                                top="50%"
+                                ml="calc(0px - var(--spinner-size) / 2)"
+                                mt="calc(0px - var(--spinner-size))"
+                            />
+                    }
                 </Masonry>
-                <Button onClick={handleLoadMore}>
-                    Load more
-                </Button>
+                {totalCount > images.length && (
+                    <Button colorScheme='moth' onClick={handleLoadMore}>
+                        Load more
+                    </Button>
+                )}
 
             </Container>
 
@@ -233,7 +278,7 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders}) =
                 >
                     <Box>
                         <Heading size="md" mb={5}>
-                            Hit me up and dissapoint your mom.
+                            Hit me up and disappoint your mom.
                         </Heading>
                     </Box>
                     <Box p={7} border={'solid'} display='flex' flexDirection='column' borderRadius='15px'
@@ -276,18 +321,19 @@ export async function getStaticProps() {
         expression: 'folder=""'
     });
 
-    const {resources, next_cursor: nextCursor} = results;
+    const {resources, next_cursor: nextCursor, total_count: totalCount} = results;
 
     const images = mapImageResources(resources)
 
     const {folders} = await getFolders();
-
     console.log(folders)
+
 
     return {
         props: {
             images,
             nextCursor: nextCursor || false,
+            totalCount,
             folders
         }
     }

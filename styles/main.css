@@ -9,6 +9,10 @@ body {
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
 }
 
+button {
+    box-shadow: none !important;
+}
+
 body::-webkit-scrollbar { /* WebKit */
     width: 0;
     height: 0;
@@ -19,15 +23,13 @@ body::-webkit-scrollbar { /* WebKit */
 }
 
 .my-masonry-grid_column {
-    padding-left: 30px;
+    padding-left: 8px;
     background-clip: padding-box;
 }
 
 .my-masonry-grid {
     position: relative;
     width: auto;
-    min-height: 10vh;
-    margin-left: -30px;
     display: flex;
 }
 
