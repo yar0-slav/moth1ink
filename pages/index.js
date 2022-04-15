@@ -194,29 +194,25 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders}) =
                     <Box key='""'>
                         <Button as='h1' data-folder-path='""'>Tattoos</Button>
                     </Box>
-                    {folders ?
-                        folders.map(folder => {
+                    {folders?.map(folder => {
                         return (
                             <Box key={folder.path}>
                                 <Button as='h1' data-folder-path={folder.path}>{folder.name}</Button>
                             </Box>
                         )
-                    })
-                    : (null)}
+                    })}
                 </Box>
                 <Masonry
                     breakpointCols={3}
                     className="my-masonry-grid"
                     columnClassName="my-masonry-grid_column"
                 >
-                    {images ?
-                        images.map(image => {
+                    {images?.map(image => {
                         return (
                             <Image src={image.src} width={image.width} height={image.height} alt={image.title}
                                    key={image.id}/>
                         )
-                    })
-                    : (null)}
+                    })}
                 </Masonry>
                 <Button onClick={handleLoadMore}>
                     Load more
