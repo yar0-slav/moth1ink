@@ -286,7 +286,7 @@ export async function getStaticProps() {
 
     return {
         props: {
-            images,
+            images: images || false,
             nextCursor: nextCursor || false,
             folders
         }
