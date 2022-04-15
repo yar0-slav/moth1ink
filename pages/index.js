@@ -22,15 +22,15 @@ const LazyVoxelDog = dynamic(() => import('../components/model-custom'), {
     loading: () => <VoxelDogLoader/>
 })
 
-const Page = ({images: defaultImages, nextCursor: defaultNextCursor,folders,totalCount: defaultTotalCount}) => {
+const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders}) => {
 
     const [copySuccess, setCopySuccess] = useState('');
     const textAreaRef = useRef(null);
 
     const [images, setImages] = useState(defaultImages)
     const [nextCursor, setNextCursor] = useState(defaultNextCursor)
-    const [totalCount, setTotalCount] = useState(JSON.stringify(defaultTotalCount));
     const [activeFolder, setActiveFolder] = useState('')
+    console.log(activeFolder)
 
     useEffect(() => {
 
@@ -110,7 +110,7 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor,folders,tota
             })
         }).then(r => r.json());
 
-        const {resources, next_cursor: updatedNextCursor,  total_count: updatedTotalCount} = results;
+        const {resources, next_cursor: updatedNextCursor} = results;
 
         const images = mapImageResources(resources)
 
@@ -122,13 +122,13 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor,folders,tota
         })
 
         setNextCursor(updatedNextCursor)
-        setTotalCount(updatedTotalCount);
     }
+
 
     function setClipboard(text) {
         var type = "text/plain";
         var blob = new Blob([text], {type});
-        var data = [new window.ClipboardItem({[type]: blob})];
+        var data = [new ClipboardItem({[type]: blob})];
 
         navigator.clipboard.write(data).then(
             function () {
@@ -145,8 +145,7 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor,folders,tota
         const folderPath = event.target.dataset.folderPath;
         setActiveFolder(folderPath)
         setNextCursor(undefined)
-        setImages([])
-        setTotalCount(0)
+        setImages([]);
     }
 
     useEffect(() => {
@@ -159,7 +158,7 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor,folders,tota
                 })
             }).then(r => r.json());
 
-            const {resources, next_cursor: updatedNextCursor, total_count: updatedTotalCount} = results;
+            const {resources, next_cursor: updatedNextCursor} = results;
 
             const images = mapImageResources(resources)
 
@@ -170,11 +169,9 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor,folders,tota
                 ]
             })
 
-            setImages(images);
             setNextCursor(updatedNextCursor)
-            setTotalCount(updatedTotalCount)
         })()
-    }, [activeFolder, nextCursor])
+    }, [activeFolder])
 
     return (
         <Container className='index__content' maxW={"container.lg"} p={0}>
@@ -217,12 +214,9 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor,folders,tota
                         )
                     })}
                 </Masonry>
-
-                {totalCount > images.length && (
-                    <Button onClick={handleLoadMore}>
-                        Load more
-                    </Button>
-                )}
+                <Button onClick={handleLoadMore}>
+                    Load more
+                </Button>
 
             </Container>
 
@@ -239,7 +233,7 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor,folders,tota
                 >
                     <Box>
                         <Heading size="md" mb={5}>
-                            Hit me up and disappoint your mom.
+                            Hit me up and dissapoint your mom.
                         </Heading>
                     </Box>
                     <Box p={7} border={'solid'} display='flex' flexDirection='column' borderRadius='15px'
@@ -282,21 +276,19 @@ export async function getStaticProps() {
         expression: 'folder=""'
     });
 
-    const {resources, next_cursor: nextCursor, total_count: totalCount} = results
+    const {resources, next_cursor: nextCursor} = results;
 
     const images = mapImageResources(resources)
-    console.log(results)
 
-    const folders = await getFolders();
-    console.log(folders);
+    const {folders} = await getFolders();
 
+    console.log(folders)
 
     return {
         props: {
-            images: images,
+            images,
             nextCursor: nextCursor || false,
-            folders: folders,
-            totalCount: totalCount,
+            folders
         }
     }
 
