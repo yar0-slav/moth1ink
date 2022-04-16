@@ -1,7 +1,7 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {Container, Box, Heading, Flex, Text, Button, Link, Spinner} from '@chakra-ui/react';
 import Masonry from 'react-masonry-css'
-import {CopyIcon, CheckIcon} from '@chakra-ui/icons'
+import { CopyIcon, CheckIcon } from '@chakra-ui/icons'
 
 
 import Image from 'next/image'
@@ -21,8 +21,9 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, to
 
     const [images, setImages] = useState(defaultImages)
     const [nextCursor, setNextCursor] = useState(defaultNextCursor)
-    const [totalCount, setTotalCount] = useState(defaultTotalCount);
+    const [totalCount, setTotalCount] = useState(defaultTotalCount)
     const [activeFolder, setActiveFolder] = useState('')
+    const [loaderActive, setLoaderActive] = useState(false)
 
 
     async function handleLoadMore(event) {
@@ -94,6 +95,27 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, to
         setClipboard(textAreaRef.current.innerHTML);
     }
 
+    const LoadingSpinner = () => {
+
+        useEffect(() => {
+            return () => {
+                setLoaderActive(true)
+            };
+        }, []);
+
+        return (
+            <Spinner
+                className='gallery-spinner'
+                size="xl"
+                position="absolute"
+                left="50%"
+                top="50%"
+                ml="calc(0px - var(--spinner-size) / 2)"
+                mt="calc(0px - var(--spinner-size))"
+                data-loader={loaderActive}
+            />
+        )
+    }
 
 
     return (
@@ -144,20 +166,16 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, to
                                     )
 
                                 })
-                                : <Spinner
-                                    size="xl"
-                                    position="absolute"
-                                    left="50%"
-                                    top="50%"
-                                    ml="calc(0px - var(--spinner-size) / 2)"
-                                    mt="calc(0px - var(--spinner-size))"
-                                />
+                                :
+                                <LoadingSpinner></LoadingSpinner>
                         }
                     </Masonry>
                     {totalCount > images.length && (
-                        <Button colorScheme='moth' onClick={handleLoadMore}>
+
+                        <Button colorScheme='moth' onClick={handleLoadMore} display={loaderActive ? 'none' : 'block'}>
                             Load more
                         </Button>
+
                     )}
                 </Box>
             </Container>

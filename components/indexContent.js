@@ -59,7 +59,6 @@ const IndexContent = () => {
                 start: 'top 50%',
                 end: 'bottom 50%',
                 onEnter: () => gsap.to(x, {opacity: 1}),
-                onLeave: () => gsap.to(x, {opacity: 0}),
                 onLeaveBack: () => gsap.to(x, {opacity: 0}),
                 onEnterBack: () => gsap.to(x, {opacity: 1}),
             });
