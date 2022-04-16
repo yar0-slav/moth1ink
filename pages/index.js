@@ -64,14 +64,16 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, to
             const results = await fetch('/api/search', {
                 method: 'POST',
                 body: JSON.stringify({
-                    nextCursor,
                     expression: `folder="${activeFolder || ''}"`
                 })
             }).then(r => r.json());
 
+            console.log(results)
+
             const {resources, next_cursor: updatedNextCursor, total_count: updatedTotalCount} = results;
 
             const images = mapImageResources(resources)
+
 
             setImages(images);
             setNextCursor(updatedNextCursor)
@@ -171,10 +173,14 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, to
                         }
                     </Masonry>
                     {totalCount > images.length && (
-
-                        <Button colorScheme='moth' onClick={handleLoadMore} display={loaderActive ? 'none' : 'block'}>
-                            Load more
-                        </Button>
+                        <Flex
+                            justifyContent='center'
+                            mt={5}
+                        >
+                            <Button colorScheme='moth' onClick={handleLoadMore} display={loaderActive ? 'none' : 'block'}>
+                                Load more
+                            </Button>
+                        </Flex>
 
                     )}
                 </Box>
