@@ -5,7 +5,6 @@ import {Box, Container } from '@chakra-ui/react'
 
 const Main = ({ children, router }) => {
 
-
         return (
         <Box as="main" className="background-color--change" data-page={router.asPath == '/' ? 'homepage' : router.asPath.slice(1)} pb={8}>
             <Head>
