@@ -81,11 +81,6 @@ const Meetmoth = () => {
                     </Box>
                 </Box>
             </Section>
-            <style global jsx>{`
-              .background-color--change {
-                background-color: black;
-              }
-            `}</style>
         </Container>
     )
 }

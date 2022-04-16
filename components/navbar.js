@@ -7,11 +7,35 @@ import {
     useColorModeValue
 } from '@chakra-ui/react'
 
+import {useRouter} from "next/router";
+// import React, { useEffect,useState } from "react";
+
 
 
 const LinkItem = ({ href, path, target, children, ...props }) => {
+    const router = useRouter();
     const active = path === href
     const inactiveColor = useColorModeValue('gray200', 'whiteAlpha.900')
+
+    // const [state, setState] = useState('')
+    //
+    // useEffect(() => {
+    //     const handleRouteChange = (url) => {
+    //         console.log(
+    //             `App is changing to ${url}`
+    //         )
+    //         setState({ clicked: false, menuName: "Menu" })
+    //     }
+    //
+    //     router.events.on('routeChangeStart', handleRouteChange)
+    //
+    //     // If the component is unmounted, unsubscribe
+    //     // from the event with the `off` method:
+    //     return () => {
+    //         router.events.off('routeChangeStart', handleRouteChange)
+    //     }
+    // }, [])
+
     return (
         <NextLink href={href} passHref scroll={false}>
             <Link

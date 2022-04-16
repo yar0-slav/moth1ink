@@ -1,29 +1,19 @@
 import {Container, Box, Heading, Flex, Text, Button, Link, Spinner} from '@chakra-ui/react';
 import Masonry from 'react-masonry-css'
-import {CopyIcon, CheckIcon} from '@chakra-ui/icons'
-import dynamic from 'next/dynamic'
-import Section from "../components/section";
+import { CopyIcon, CheckIcon } from '@chakra-ui/icons'
 
 import Image from 'next/image'
 
 import Zoom from 'react-medium-image-zoom'
 import 'react-medium-image-zoom/dist/styles.css'
 
-import VoxelDogLoader from '../components/model-loader'
-import SocialSidebar from "../components/SocialSidebar";
+import IndexContent from "../components/indexContent";
+
+import React, { useEffect, useRef, useState } from 'react'
+
+import { search, mapImageResources, getFolders } from "../lib/cloudinary";
 
 
-import {gsap} from "gsap/dist/gsap";
-import {ScrollTrigger} from "gsap/dist/ScrollTrigger";
-import React, {useEffect, useRef, useState} from 'react'
-
-import {search, mapImageResources, getFolders} from "../lib/cloudinary";
-
-
-const LazyVoxelDog = dynamic(() => import('../components/model-custom'), {
-    ssr: false,
-    loading: () => <VoxelDogLoader/>
-})
 
 const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, totalCount: defaultTotalCount}) => {
 
@@ -35,71 +25,73 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, to
     const [totalCount, setTotalCount] = useState(defaultTotalCount);
     const [activeFolder, setActiveFolder] = useState('')
 
-    useEffect(() => {
-
-        if (typeof window !== "undefined") {
-            gsap.registerPlugin(ScrollTrigger);
-        }
-
-        gsap.set("body", {backgroundColor: '#FF005C',});
-
-        ScrollTrigger.create({
-            trigger: '.second-container',
-            start: 'top 75%',
-            onEnter: () =>
-                gsap.to('body', {
-                    backgroundColor: '#000',
-                    color: '#fff',
-                }),
-            onLeaveBack: () =>
-                gsap.to('body', {
-                    backgroundColor: '#FF005C',
-                    color: '#000'
-                })
-        });
-
-
-        gsap.utils.toArray(".opacity-container").forEach(function (elem) {
-
-            const img = elem.querySelector('div')
-            const text = elem.querySelector('.index-text--content')
-
-            gsap.set(img, {opacity: 0})
-
-            ScrollTrigger.create({
-                trigger: elem,
-                start: 'top 50%',
-                end: 'bottom 50%',
-                onEnter: () => gsap.to(img, {opacity: 1}),
-                onLeaveBack: () => gsap.to(img, {opacity: 0}),
-                onEnterBack: () => gsap.to(img, {opacity: 1}),
-            });
-
-
-            gsap.to(text, {
-                yPercent: -20,
-                ease: "none",
-                scrollTrigger: {
-                    trigger: elem,
-                    start: "top 50%",
-                    end: 'bottom 50%',
-                    scrub: 1
-                },
-            });
-
-        });
-
-        ScrollTrigger.create({
-            trigger: '.first_section',
-            start: 'top 50%',
-            end: 'bottom 50%',
-            onEnter: () => gsap.to('.first_section', {opacity: 1}),
-            onLeave: () => gsap.to('.first_section', {opacity: 0}),
-            onLeaveBack: () => gsap.to('.first_section', {opacity: 0}),
-            onEnterBack: () => gsap.to('.first_section', {opacity: 1}),
-        });
-
-    }, [])
+    // useEffect(() => {
+    //
+    //     if (typeof window !== "undefined") {
+    //         gsap.registerPlugin(ScrollTrigger);
+    //     }
+    //     // background color change
+    //     gsap.set("body", {backgroundColor: '#FF005C',});
+    //
+    //     ScrollTrigger.create({
+    //         trigger: '.second-container',
+    //         start: 'top 75%',
+    //         onEnter: () =>
+    //             gsap.to('body', {
+    //                 backgroundColor: '#000',
+    //                 color: '#fff',
+    //             }),
+    //         onLeaveBack: () =>
+    //             gsap.to('body', {
+    //                 backgroundColor: '#FF005C',
+    //                 color: '#000'
+    //             })
+    //     });
+    //
+    //
+    //     gsap.utils.toArray(".opacity-container").forEach(function (elem) {
+    //
+    //         const x = elem.querySelector('.opacity-wrapper')
+    //         const text = elem.querySelector('.index-text--content')
+    //
+    //         gsap.set(x, {opacity: 0})
+    //
+    //         ScrollTrigger.create({
+    //             trigger: elem,
+    //             start: 'top 50%',
+    //             end: 'bottom 50%',
+    //             markers: true,
+    //             onEnter: () => gsap.to(x, {opacity: 1}),
+    //             onLeave: () => gsap.to(x, {opacity: 0}),
+    //             onLeaveBack: () => gsap.to(x, {opacity: 0}),
+    //             onEnterBack: () => gsap.to(x, {opacity: 1}),
+    //         });
+    //
+    //
+    //         gsap.to(text, {
+    //             yPercent: -20,
+    //             ease: "none",
+    //             scrollTrigger: {
+    //                 trigger: elem,
+    //                 start: "top 50%",
+    //                 end: 'bottom 50%',
+    //                 scrub: 1
+    //             },
+    //         });
+    //
+    //     });
+    //
+    //     ScrollTrigger.create({
+    //         trigger: '.first_section',
+    //         start: 'top 50%',
+    //         end: 'bottom 50%',
+    //         onEnter: () => gsap.to('.first_section', {opacity: 1}),
+    //         onLeave: () => gsap.to('.first_section', {opacity: 0}),
+    //         onLeaveBack: () => gsap.to('.first_section', {opacity: 0}),
+    //         onEnterBack: () => gsap.to('.first_section', {opacity: 1}),
+    //     });
+    //
+    // }, [])
 
 
     async function handleLoadMore(event) {
@@ -190,79 +182,71 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, to
             ? Buffer.from(str).toString('base64')
             : window.btoa(str);
 
-    console.log(activeFolder.length)
 
     return (
         <Container className='index__content' maxW={"container.lg"} p={0}>
-            <Section>
-                <Box className='first_section' borderRadius={"lg"} position='relative'>
-                    <Heading as='h1' size='4xl'>
-                        Hi, I am Moth,
-                    </Heading>
-                    <Heading as={'h3'} mb={7} pt={'3'} fontWeight={'400'}>
-                        your tattoo artist.
-                    </Heading>
-                    <SocialSidebar/>
-                    <LazyVoxelDog/>
-                </Box>
-            </Section>
+            <IndexContent></IndexContent>
 
             <Container maxW="container.lg" mt='30vh' px={0} className="second-container opacity-container"
                        justifyContent='space-between'>
-                <Box py='2em' justifyContent='space-around' display='flex' onClick={handleOnFolderClick}>
-                    <Box key='""'>
-                        <Button fontSize='3xl' variant='link' textDecoration={activeFolder.length <= 2 ? 'underline' : 'none'} colorScheme='white' data-folder-path='""'>Tattoos</Button>
-                    </Box>
+                <Box className='opacity-wrapper'>
+                    <Box py='2em' justifyContent='space-around' display='flex' onClick={handleOnFolderClick}>
+                        <Box key='""'>
+                            <Button fontSize='3xl' variant='link'
+                                    textDecoration={activeFolder.length <= 2 ? 'underline' : 'none'} colorScheme='white'
+                                    data-folder-path='""'>Tattoos</Button>
+                        </Box>
 
-                    {
-                        folders.map(folder => {
-                            const active = folder.path === activeFolder
-                            return (
-                                <Box key={folder.path} textDecoration={active ? 'underline' : 'none'}>
-                                    <Button variant='link' fontSize='3xl' colorScheme='white' data-folder-path={folder.path}>{folder.name}</Button>
-                                </Box>
-                            )
-                        })
-                    }
-                </Box>
-                <Masonry
-                    breakpointCols={3}
-                    className="my-masonry-grid"
-                    columnClassName="my-masonry-grid_column"
-                >
-                    {
-                        images && images.length > 0 ?
-                            images.map(image => {
+                        {
+                            folders.map(folder => {
+                                const active = folder.path === activeFolder
                                 return (
-                                    <Zoom key={image.id}>
-                                        <Image src={image.src} width={image.width} height={image.height}
-                                               alt={image.title}
-                                               key={image.id}
-                                               placeholder="blur"
-                                               blurDataURL={`data:image/svg+xml;base64,${toBase64(
-                                                   convertImage(`${image.width}`, `${image.height}`)
-                                               )}`}
-                                        />
-                                    </Zoom>
+                                    <Box key={folder.path} textDecoration={active ? 'underline' : 'none'}>
+                                        <Button variant='link' fontSize='3xl' colorScheme='white'
+                                                data-folder-path={folder.path}>{folder.name}</Button>
+                                    </Box>
                                 )
-
                             })
-                            : <Spinner
-                                size="xl"
-                                position="absolute"
-                                left="50%"
-                                top="50%"
-                                ml="calc(0px - var(--spinner-size) / 2)"
-                                mt="calc(0px - var(--spinner-size))"
-                            />
-                    }
-                </Masonry>
-                {totalCount > images.length && (
-                    <Button colorScheme='moth' onClick={handleLoadMore}>
-                        Load more
-                    </Button>
-                )}
+                        }
+                    </Box>
+                    <Masonry
+                        breakpointCols={3}
+                        className="my-masonry-grid"
+                        columnClassName="my-masonry-grid_column"
+                    >
+                        {
+                            images && images.length > 0 ?
+                                images.map(image => {
+                                    return (
+                                        <Zoom key={image.id}>
+                                            <Image src={image.src} width={image.width} height={image.height}
+                                                   alt={image.title}
+                                                   key={image.id}
+                                                   placeholder="blur"
+                                                   blurDataURL={`data:image/svg+xml;base64,${toBase64(
+                                                       convertImage(`${image.width}`, `${image.height}`)
+                                                   )}`}
+                                            />
+                                        </Zoom>
+                                    )
 
+                                })
+                                : <Spinner
+                                    size="xl"
+                                    position="absolute"
+                                    left="50%"
+                                    top="50%"
+                                    ml="calc(0px - var(--spinner-size) / 2)"
+                                    mt="calc(0px - var(--spinner-size))"
+                                />
+                        }
+                    </Masonry>
+                    {totalCount > images.length && (
+                        <Button colorScheme='moth' onClick={handleLoadMore}>
+                            Load more
+                        </Button>
+                    )}
+                </Box>
             </Container>
 
             <Container maxW='container.md' p={0} my='26vh'>

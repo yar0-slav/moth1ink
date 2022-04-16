@@ -37,6 +37,8 @@ body::-webkit-scrollbar { /* WebKit */
     margin-bottom: 15px; /* space between items */
 }
 
+
+
 /*.object_three > canvas:nth-child(2){*/
 /*    display: none !important;*/
 /*    visibility: 0 !important;*/
