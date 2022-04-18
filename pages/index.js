@@ -68,8 +68,6 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, to
                 })
             }).then(r => r.json());
 
-            console.log(results)
-
             const {resources, next_cursor: updatedNextCursor, total_count: updatedTotalCount} = results;
 
             const images = mapImageResources(resources)
@@ -247,8 +245,6 @@ export async function getStaticProps() {
     const images = mapImageResources(resources)
 
     const {folders} = await getFolders();
-    console.log(folders)
-
 
     return {
         props: {
