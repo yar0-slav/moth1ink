@@ -135,7 +135,8 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, to
                         </Box>
 
                         {
-                            folders.map(folder => {
+                            folders.slice(0).reverse().map(folder => {
+                                console.log(folder)
                                 const isActive  = folder.path === activeFolder
                                 return (
                                     <Box key={folder.path} data-active-folder={isActive}>
