@@ -129,7 +129,7 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, to
                     <Box py='2em' justifyContent='space-around' display='flex' onClick={handleOnFolderClick}>
                         <Box key='""'>
                             <Button fontSize='3xl' variant='link'
-                                    textDecoration={activeFolder.length <= 2 ? 'underline' : 'none'} colorScheme='white'
+                                     colorScheme='white'
                                     data-folder-path='""'>Tattoos
                             </Button>
                         </Box>
@@ -138,7 +138,7 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, to
                             folders.map(folder => {
                                 const isActive  = folder.path === activeFolder
                                 return (
-                                    <Box key={folder.path} textDecoration={isActive ? 'underline' : 'none'} data-active-folder={isActive}>
+                                    <Box key={folder.path} data-active-folder={isActive}>
                                         <Button variant='link' fontSize='3xl' colorScheme='white'
                                                 data-folder-path={folder.path}>{folder.name}</Button>
                                     </Box>
