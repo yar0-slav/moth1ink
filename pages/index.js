@@ -57,6 +57,7 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, to
         setActiveFolder(folderPath)
         setNextCursor(undefined)
         setImages([]);
+        setTotalCount(0);
     }
 
     useEffect(() => {
@@ -129,14 +130,15 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, to
                         <Box key='""'>
                             <Button fontSize='3xl' variant='link'
                                     textDecoration={activeFolder.length <= 2 ? 'underline' : 'none'} colorScheme='white'
-                                    data-folder-path='""'>Tattoos</Button>
+                                    data-folder-path='""'>Tattoos
+                            </Button>
                         </Box>
 
                         {
                             folders.map(folder => {
-                                const active = folder.path === activeFolder
+                                const isActive  = folder.path === activeFolder
                                 return (
-                                    <Box key={folder.path} textDecoration={active ? 'underline' : 'none'}>
+                                    <Box key={folder.path} textDecoration={isActive ? 'underline' : 'none'} data-active-folder={isActive}>
                                         <Button variant='link' fontSize='3xl' colorScheme='white'
                                                 data-folder-path={folder.path}>{folder.name}</Button>
                                     </Box>
