@@ -18,9 +18,10 @@ export const DogContainer = forwardRef(({ children }, ref) => (
         ref={ref}
         m="auto"
         className='object_three'
-        w={[320, 480, 620]}
-        h={[320, 480, 620]}
+        w={[300, 480, 620]}
+        h={[300, 480, 620]}
         position="relative"
+        order={{base: '1', md: 'initial'}}
         >
         {children}
         <Box pos='absolute' bottom='15px' left='15px'>

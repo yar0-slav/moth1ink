@@ -27,7 +27,7 @@ const Meetmoth = () => {
                         mb={5}
                     >
                         <Box pr={{base: "0", md: '25px'}} mb={{base: "1em", md: '0'}}>
-                            <p pr={{base: "0", md: '25px'}} mb={{base: "1em", md: '0'}}>
+                            <p pr={{base: "0", md: '25px'}} mb={{base: "1em", md: '0'}} >
                                 Please, let me introduce myself a bit
                                 more before we jump into a tattoo session.<br /><br />
 

@@ -20,6 +20,7 @@ const SocialSidebar = () => {
             right={{base: undefined, md: '-20px'}}
             bottom='0'
             mb={5}
+            order={{base: '4', md: 'initial'}}
 
         >
             <Container p={0} maxW='container.xl'>

@@ -35,13 +35,11 @@ const IndexContent = () => {
             start: 'top 75%',
             onEnter: () =>
                 gsap.to(homepage, {
-                    backgroundColor: '#000',
-                    color: '#fff',
+                    backgroundColor: '#000'
                 }),
             onLeaveBack: () =>
                 gsap.to(homepage, {
-                    backgroundColor: '#FF005C',
-                    color: '#000'
+                    backgroundColor: '#FF005C'
                 })
 
         });
@@ -105,11 +103,13 @@ const IndexContent = () => {
 
     return (
         <Section>
-            <Box className='first_section' borderRadius={"lg"} position='relative'>
-                <Heading as='h1' size='4xl'>
+            <Box className='first_section' borderRadius={"lg"} position='relative' display='flex'
+                flexDirection='column'
+            >
+                <Heading as='h1' size='4xl' order={{base: '2', md: 'initial'}}>
                     Hi, I am Moth,
                 </Heading>
-                <Heading as={'h3'} mb={7} pt={'3'} fontWeight={'400'}>
+                <Heading as={'h3'} mb={7} pt={'3'} fontWeight={'400'} order={{base: '3', md: 'initial'}}>
                     your tattoo artist.
                 </Heading>
                 <SocialSidebar/>

@@ -14,7 +14,8 @@ import {search, mapImageResources, getFolders} from "../lib/cloudinary";
 
 import { convertImage, toBase64 } from "../components/imagePreloader";
 
-const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, totalCount: defaultTotalCount}) => {
+
+const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, totalCount: defaultTotalCount, img, svg}) => {
 
     const [copySuccess, setCopySuccess] = useState('');
     const textAreaRef = useRef(null);
@@ -120,27 +121,29 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, to
 
 
     return (
-        <Container className='index__content' maxW={"container.lg"} p={0}>
+        <Container className='index__content' maxW={"container.lg"}  color={'white'} p={0}>
             <IndexContent></IndexContent>
 
             <Container maxW="container.lg" mt='30vh' px={0} className="second-container opacity-container"
                        justifyContent='space-between'>
                 <Box className='opacity-wrapper'>
-                    <Box py='2em' justifyContent='space-around' display='flex' onClick={handleOnFolderClick}>
-                        <Box key='""'>
-                            <Button fontSize='3xl' variant='link'
-                                     colorScheme='white'
-                                    data-folder-path='""'>Tattoos
+                    <Box py='2em' justifyContent='space-around' display='flex' flexWrap='wrap' onClick={handleOnFolderClick}>
+                        <Box key='""' p={2} >
+                            <Button
+                                fontSize='sm' variant='link'
+                                colorScheme='white'
+                                data-folder-path='""'
+                            >
+                                Tattoos
                             </Button>
                         </Box>
 
                         {
                             folders.slice(0).reverse().map(folder => {
-                                console.log(folder)
                                 const isActive  = folder.path === activeFolder
                                 return (
-                                    <Box key={folder.path} data-active-folder={isActive}>
-                                        <Button variant='link' fontSize='3xl' colorScheme='white'
+                                    <Box key={folder.path} p={2} data-active-folder={isActive}>
+                                        <Button variant='link' fontSize='sm' colorScheme='white'
                                                 data-folder-path={folder.path}>{folder.name}</Button>
                                     </Box>
                                 )
@@ -151,6 +154,7 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, to
                         breakpointCols={3}
                         className="my-masonry-grid"
                         columnClassName="my-masonry-grid_column"
+                        style={{minHeight: 50 + 'vh'}}
                     >
                         {
                             images && images.length > 0 ?
@@ -172,6 +176,13 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, to
                                 :
                                 <LoadingSpinner></LoadingSpinner>
                         }
+                        {/*<BlurringImage*/}
+                        {/*    img={img}*/}
+                        {/*    svg={svg}*/}
+                        {/*    layout="responsive"*/}
+                        {/*    width={1200}*/}
+                        {/*    height={800}*/}
+                        {/*/>*/}
                     </Masonry>
                     {totalCount > images.length && (
                         <Flex
@@ -224,7 +235,6 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, to
                                 height='100%'
                                 layout='responsive'
                                 objectFit='contain'
-                                _hover={{filter: "opacity(0.5) drop-shadow(0px 0px #e60053) saturate(8)"}}
                             />
                         </Link>
                     </Box>
@@ -239,6 +249,7 @@ export default Page
 
 export async function getStaticProps() {
 
+
     const results = await search({
         expression: 'folder=""'
     });
@@ -246,6 +257,7 @@ export async function getStaticProps() {
     const {resources, next_cursor: nextCursor, total_count: totalCount} = results;
 
     const images = mapImageResources(resources)
+
 
     const {folders} = await getFolders();
 
