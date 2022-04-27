@@ -15,7 +15,7 @@ import {search, mapImageResources, getFolders} from "../lib/cloudinary";
 import { convertImage, toBase64 } from "../components/imagePreloader";
 
 
-const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, totalCount: defaultTotalCount, img, svg}) => {
+const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, totalCount: defaultTotalCount}) => {
 
     const [copySuccess, setCopySuccess] = useState('');
     const textAreaRef = useRef(null);

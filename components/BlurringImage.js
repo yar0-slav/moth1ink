@@ -6,7 +6,6 @@ export function BlurringImage({
                                   svg: [Svg, svgProps, rectangles],
                                   img,
                                   alt,
-                                  style,
                                   blurLevel = 5,
                                   height = undefined,
                                   width = undefined,
