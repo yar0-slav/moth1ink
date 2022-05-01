@@ -14,6 +14,8 @@ import {search, mapImageResources, getFolders} from "../lib/cloudinary";
 
 import { convertImage, toBase64 } from "../components/imagePreloader";
 
+import * as ga from '../lib/ga'
+
 
 const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, totalCount: defaultTotalCount}) => {
 
@@ -120,6 +122,16 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, to
     }
 
 
+    const clickItem = (data) => {
+        ga.event({
+            action: "click",
+            params : {
+                item: data
+            }
+        })
+    }
+
+
     return (
         <Container className='index__content' maxW={"container.lg"}  color={'white'} p={0}>
             <IndexContent></IndexContent>
@@ -133,6 +145,8 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, to
                                 fontSize='sm' variant='link'
                                 colorScheme='white'
                                 data-folder-path='""'
+                                data-ga='Tattoos Gallery'
+                                onClick={(e) => clickItem(e.target.getAttribute('data-ga'))}
                             >
                                 Tattoos
                             </Button>
@@ -143,8 +157,15 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, to
                                 const isActive  = folder.path === activeFolder
                                 return (
                                     <Box key={folder.path} p={2} data-active-folder={isActive}>
-                                        <Button variant='link' fontSize='sm' colorScheme='white'
-                                                data-folder-path={folder.path}>{folder.name}</Button>
+                                        <Button variant='link'
+                                                fontSize='sm'
+                                                colorScheme='white'
+                                                data-folder-path={folder.path}
+                                                data-ga={folder.name + ' ' + 'Gallery'}
+                                                onClick={(e) => clickItem(e.target.getAttribute('data-ga'))}
+                                        >
+                                            {folder.name}
+                                        </Button>
                                     </Box>
                                 )
                             })
@@ -176,13 +197,6 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, to
                                 :
                                 <LoadingSpinner></LoadingSpinner>
                         }
-                        {/*<BlurringImage*/}
-                        {/*    img={img}*/}
-                        {/*    svg={svg}*/}
-                        {/*    layout="responsive"*/}
-                        {/*    width={1200}*/}
-                        {/*    height={800}*/}
-                        {/*/>*/}
                     </Masonry>
                     {totalCount > images.length && (
                         <Flex
@@ -219,15 +233,26 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, to
                         <Text alignSelf='center' ref={textAreaRef} mb={2} color={copySuccess ? '#22f640' : undefined}>
                             moth.1nk.666@gmail.com
                         </Text>
-                        <Button onClick={copyToClipboard} leftIcon={copySuccess ? <CheckIcon/> : <CopyIcon/>}
+                        <Button onClick={(e) =>
+                                    {
+                                        copyToClipboard();
+                                        clickItem(e.target.getAttribute('data-ga'))
+                                    }
+                                }
+                                leftIcon={copySuccess ? <CheckIcon/> : <CopyIcon/>}
                                 colorScheme={copySuccess ? 'mothGreen' : "moth"}
+                                data-ga="Email Copied"
                                 variant='solid'>{copySuccess ? 'Email Copied' : 'Copy email'}</Button>
                     </Box>
                     <Text my={5}>
                         or DMs
                     </Text>
                     <Box position='relative' w='5em' h='5em'>
-                        <Link href='https://www.instagram.com/moth.1nk/' isExternal>
+                        <Link
+                            href='https://www.instagram.com/moth.1nk/'
+                            isExternal
+                            onClick={(e) => clickItem(e.target.getAttribute('data-ga'))}
+                        >
                             <Image
                                 alt='instagram'
                                 src='/socials/instagram-white.png'
@@ -235,6 +260,7 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, to
                                 height='100%'
                                 layout='responsive'
                                 objectFit='contain'
+                                data-ga="Instagram Footer"
                             />
                         </Link>
                     </Box>

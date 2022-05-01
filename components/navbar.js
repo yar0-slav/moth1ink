@@ -7,6 +7,8 @@ import {
     useColorModeValue
 } from '@chakra-ui/react'
 
+import * as ga from "../lib/ga";
+
 const LinkItem = ({ href, path, target, children, ...props }) => {
 
     const active = path === href
@@ -32,6 +34,15 @@ const LinkItem = ({ href, path, target, children, ...props }) => {
 const Navbar = props => {
     const { path } = props
 
+    const clickItem = (data) => {
+        ga.event({
+            action: "click",
+            params : {
+                item: data
+            }
+        })
+    }
+
     return (
         <Box
             position="fixed"
@@ -55,7 +66,13 @@ const Navbar = props => {
                     justify="right"
                     flexGrow={1}
                 >
-                    <LinkItem href="/meetmoth" path={path} px={0}>
+                    <LinkItem href="/meetmoth"
+                              path={path}
+                              px={0}
+                              data-ga='Meet Moth Page'
+                              onClick={(e) => clickItem(e.target.getAttribute('data-ga'))}
+
+                    >
                         Meet Moth
                     </LinkItem>
 

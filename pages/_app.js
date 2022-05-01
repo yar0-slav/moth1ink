@@ -5,8 +5,26 @@ import Chakra from '../components/chakra'
 
 import '../styles/main.css'
 
+import { useEffect } from 'react'
+
+import * as ga from '../lib/ga'
+
+
 
 const Website = ({Component, pageProps, router}) => {
+
+
+    useEffect(() => {
+        const handleRouteChange = (url) => {
+            ga.pageview(url)
+        }
+        router.events.on('routeChangeComplete', handleRouteChange)
+        return () => {
+            router.events.off('routeChangeComplete', handleRouteChange)
+        }
+    }, [router.events])
+
+
     return (
         <Chakra cookies={pageProps.cookies}>
             <Fonts/>
