@@ -18,7 +18,7 @@ const Main = ({children, router}) => {
     const handleDeclineCookie = () => {
         //remove google analytics cookies
         document.cookie = "_ga=;expires=" + new Date(0).toUTCString()
-        document.cookie = `_ga_QQQHR5GTE1=.G=;expires=` + new Date(0).toUTCString()
+        document.cookie = `_ga_T0F84YE6S6=.G=;expires=` + new Date(0).toUTCString()
         document.cookie = "_gat=;expires=" + new Date(0).toUTCString()
         document.cookie = "_gid=;expires=" + new Date(0).toUTCString()
     };
