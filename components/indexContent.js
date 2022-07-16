@@ -54,7 +54,7 @@ const IndexContent = () => {
 
             ScrollTrigger.create({
                 trigger: elem,
-                start: 'top 50%',
+                start: 'top 75%',
                 end: 'bottom 50%',
                 onEnter: () => gsap.to(x, {opacity: 1}),
                 onLeaveBack: () => gsap.to(x, {opacity: 0}),
