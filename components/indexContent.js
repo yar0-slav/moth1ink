@@ -18,7 +18,7 @@ const LazyVoxelDog = dynamic(() => import('../components/model-custom'), {
 
 const IndexContent = () => {
     const router = useRouter();
-
+ 
     useEffect(() => {
 
         if (typeof window !== "undefined") {

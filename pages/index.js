@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import {Container, Box, Heading, Flex, Text, Button, Link, Spinner} from '@chakra-ui/react';
 import Masonry from 'react-masonry-css'
 import { CopyIcon, CheckIcon } from '@chakra-ui/icons'
+import Reviews from '../components/reviews';
+
 
 
 import Image from 'next/image'
@@ -82,6 +84,7 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, to
             setTotalCount(updatedTotalCount)
         })()
     }, [activeFolder])
+
 
     function setClipboard(text) {
         var type = "text/plain";
@@ -211,6 +214,8 @@ const Page = ({images: defaultImages, nextCursor: defaultNextCursor, folders, to
                     )}
                 </Box>
             </Container>
+
+            <Reviews></Reviews>
 
             <Container maxW='container.md' p={0} my='26vh'>
                 <Box textAlign='center' mb={8 * 2}>
