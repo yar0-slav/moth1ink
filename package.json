@@ -40,6 +40,7 @@
     "react-medium-image-zoom": "^4.3.7",
     "react-rating": "github:Selectra-Dev/react-rating",
     "react-sidebar": "^3.0.2",
+    "react-star-rate": "^0.2.0",
     "sharp": "^0.30.4",
     "three": "^0.139.2",
     "three-voxel-loader": "^1.2.2",

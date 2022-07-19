@@ -19,9 +19,10 @@ import { convertImage, toBase64 } from "../components/imagePreloader";
 
 import toast from 'react-hot-toast';
 
-import Rating from 'react-rating';
+import StarsRating from 'react-star-rate';
+
 import { Icon } from '@chakra-ui/react'
-import { IoRemoveCircleSharp, IoAddCircleSharp, IoStarOutline, IoStar } from 'react-icons/io5'
+import {IoAddCircleSharp, IoStar } from 'react-icons/io5'
 
 
 import * as ga from '../lib/ga'
@@ -44,7 +45,8 @@ export default function Page({ images: defaultImages, nextCursor: defaultNextCur
 
     const [comments, setComments] = useState(defaultComments)
     const [commentsEnd, setCommentsEnd] = useState(false)
-    const [starRating, setStartRating] = useState('')
+
+
 
 
     const getMoreComments = async () => {
@@ -270,12 +272,7 @@ export default function Page({ images: defaultImages, nextCursor: defaultNextCur
                     <Heading size="md" mt="8vh" mb="2vh">
                         Share your experience:
                     </Heading>
-                    <Rating
-                        emptySymbol={<Icon as={IoStarOutline} fontSize='85px' />}
-                        fullSymbol={<Icon as={IoStar} fontSize='85px' color={'#FFD538'} />}
-                        onClick={(val) => setStartRating(val)}
-                    />
-                    <AddNewComment userRating={starRating}/>
+                    <AddNewComment/>
 
                 </Box>
             </Box>
@@ -341,22 +338,22 @@ export default function Page({ images: defaultImages, nextCursor: defaultNextCur
 }
 
 
-function AddNewComment(userRating) {
+function AddNewComment() {
     const [username, setUsername] = useState('');
     const [content, setContent] = useState('');
     const [submitted, setSubmitted] = useState(false);
+    const [starRating, setStartRating] = useState('')
+
 
     const [pros, setPros] = useState([]);
     const proReference = useRef(null)
 
-    const { starRating } = userRating;
-
-
     // Validation
-    const isValid = username.length > 3 && username.length < 100 && starRating >= 1;
+    const isValid = username.length > 3 && username.length < 100;
 
     const addComment = async (e) => {
         e.preventDefault();
+        
         const ref = firestore.collection('comments');
 
         const data = {
@@ -364,7 +361,6 @@ function AddNewComment(userRating) {
             content,
             starRating,
             pros,
-            cons,
             time: serverTimestamp(),
         };
 
@@ -384,8 +380,14 @@ function AddNewComment(userRating) {
       }
 
     return (
-        <form onSubmit={addComment}>
+        <form onSubmit={addComment} onkeydown="return false">
             <Box display={submitted ? 'none' : 'block'}>
+
+                <StarsRating
+                    allowHalf={false}
+                    symbol={<Icon as={IoStar} fontSize='85px' />}
+                    onChange={(val) => setStartRating(val)}
+                />
 
                 <Flex mt='1rem' mb='2rem'>
                     <Box flexBasis={'49%'} className='input-field--pros'>
@@ -433,7 +435,7 @@ function AddNewComment(userRating) {
 
                 </Flex>
 
-                <Button type="submit" disabled={!isValid} color="black" mt='20px'>
+                <Button type="submit"  disabled={!isValid} color="black" mt='20px'>
                     Submit
                 </Button>
             </Box>
