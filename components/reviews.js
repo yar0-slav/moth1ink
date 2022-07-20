@@ -16,6 +16,7 @@ export default function Reviews({ comments, totalComments }) {
                 {
                     comments && comments.length > 0 ?
                         comments.map((comment, i) => {
+                            const { pros } = comment
                             return (
                                 <Container commentid={comment.id} maxW={"container.md"} background="#252525" p={5} rounded="base" my="10px">
                                     {
@@ -40,21 +41,23 @@ export default function Reviews({ comments, totalComments }) {
                                         <Text>
                                             {comment.content}
                                         </Text>
-                                        <Flex mt={comment.pros && comment.pros.length > 0 ? '2rem' : ''}>
+                                        <Flex /*mt={comment.pros && comment.pros.length > 0 ? '2rem' : ''}*/>
                                             <Box flexBasis={'49%'}>
                                                 {
-                                                    comment.pros && comment.pros.length > 0 ?
-                                                        comment.pros.map(x => {
-                                                            return (
-                                                                <Flex mb={'.5rem'}>
-                                                                    <Icon as={IoAddCircleSharp} color='green' fontSize={'28px'} />
-                                                                    <Text ml='1rem'>{x}</Text>
-                                                                </Flex>
-                                                            )
-                                                        })
-                                                        :
-                                                        ""
+                                                    pros && pros.length > 1 ?
+                                                    pros.map((x) => {
+
+                                                        return (
+                                                            <Flex mb={'.5rem'}>
+                                                                <Icon as={IoAddCircleSharp} color='green' fontSize={'28px'} />
+                                                                <Text ml='1rem'>{x.value}</Text>
+                                                            </Flex>
+                                                        )
+                                                    })
+                                                    :
+                                                    ""
                                                 }
+
                                             </Box>
                                             <Box flexBasis={'49%'}>
                                                 {
@@ -63,7 +66,7 @@ export default function Reviews({ comments, totalComments }) {
                                                             return (
                                                                 <Flex mb={'.5rem'}>
                                                                     <Icon as={IoRemoveCircleSharp} color='red' fontSize={'28px'} />
-                                                                    <Text ml='1rem'>{x}</Text>
+                                                                    <Text ml='1rem'>{x.value}</Text>
                                                                 </Flex>
                                                             )
                                                         })

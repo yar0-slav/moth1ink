@@ -22,7 +22,7 @@ import toast from 'react-hot-toast';
 import StarsRating from 'react-star-rate';
 
 import { Icon } from '@chakra-ui/react'
-import {IoAddCircleSharp, IoStar } from 'react-icons/io5'
+import { IoAddCircleSharp, IoStar } from 'react-icons/io5'
 
 
 import * as ga from '../lib/ga'
@@ -272,7 +272,7 @@ export default function Page({ images: defaultImages, nextCursor: defaultNextCur
                     <Heading size="md" mt="8vh" mb="2vh">
                         Share your experience:
                     </Heading>
-                    <AddNewComment/>
+                    <AddNewComment />
 
                 </Box>
             </Box>
@@ -345,16 +345,20 @@ function AddNewComment() {
     const [starRating, setStartRating] = useState('')
 
 
-    const [pros, setPros] = useState([]);
-    const proReference = useRef(null)
+
+    const [pros, setPros] = useState([
+        { value: '', executed: false }
+    ]);
+
 
     // Validation
     const isValid = username.length > 3 && username.length < 100;
 
     const addComment = async (e) => {
         e.preventDefault();
-        
+
         const ref = firestore.collection('comments');
+
 
         const data = {
             username,
@@ -371,16 +375,58 @@ function AddNewComment() {
 
     };
 
-    function handleChange(evt) {
-        const addPros = e => {
-            const newPros = pros
-            newPros.push(proReference.current.value)
-            setPros(newPros)
-          }
-      }
+
+    const handleChange = (e, index) => {
+
+
+        const { name, value } = e.target;
+        let prosValues = [...pros];
+
+        // find current index + name and set the target value 
+        prosValues[index][name] = value;
+
+        setPros(prosValues);
+
+        // add a new input field
+        if(!pros[index]['executed']) {
+
+            let newfield = { value: '', executed: false }
+            setPros([...pros, newfield])
+
+            // set interaction to true
+            prosValues[index]['executed'] = true;
+            // setPros(prosValues);
+            
+        }
+        if (pros[index][name].length === 0 && index != 0 ) {
+            prosValues[index]['executed'] = false;
+        
+            let emptyIndex = [];
+            const x = pros.forEach((x, index) => {
+                if(!x.executed) {
+                    emptyIndex.push(index + 1)
+                }
+            })
+
+            const removeInputs = pros.length - emptyIndex[0];
+
+            // removing the element using splice
+            prosValues.splice(index, removeInputs);
+
+            // updating the list
+            setPros(prosValues);
+            prosValues[index]['executed'] = false;
+
+
+        }
+        
+
+    };
+
+
 
     return (
-        <form onSubmit={addComment} onkeydown="return false">
+        <form onSubmit={addComment}>
             <Box display={submitted ? 'none' : 'block'}>
 
                 <StarsRating
@@ -392,21 +438,31 @@ function AddNewComment() {
                 <Flex mt='1rem' mb='2rem'>
                     <Box flexBasis={'49%'} className='input-field--pros'>
                         <FormLabel>Pros</FormLabel>
-                        <InputGroup display={'flex'} flexDirection='column'>
-                            <InputLeftElement
-                                pointerEvents='none'
-                                children={<Icon as={IoAddCircleSharp} color={'green'} fontSize={'28px'} />}
-                            >
-                            </InputLeftElement>
-                            <Input
-                                value={pros}
-                                order={0}
-                                variant='unstyled'
-                                onChange={handleChange}
-                                placeholder="Type your name here"
-                                mb="15px"
-                            />
-                        </InputGroup>
+
+                        {
+                            pros.map((input, index) => {
+                                return (
+                                    <InputGroup display={'flex'} flexDirection='column' key={index}>
+                                        <InputLeftElement
+                                            pointerEvents='none'
+                                            children={<Icon as={IoAddCircleSharp} color={'green'} fontSize={'28px'} />}
+                                        >
+                                        </InputLeftElement>
+                                        <Input
+                                            value={input[index]}
+                                            order={0}
+                                            variant='unstyled'
+                                            name='value'
+                                            onChange={(event) => {
+                                                handleChange(event, index);
+                                            }}
+                                            placeholder="Type your name here"
+                                            mb="15px"
+                                        />
+                                    </InputGroup>
+                                )
+                            })
+                        }
                     </Box>
                 </Flex>
 
@@ -435,7 +491,7 @@ function AddNewComment() {
 
                 </Flex>
 
-                <Button type="submit"  disabled={!isValid} color="black" mt='20px'>
+                <Button type="submit" disabled={!isValid} color="black" mt='20px'>
                     Submit
                 </Button>
             </Box>
