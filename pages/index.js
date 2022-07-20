@@ -387,27 +387,28 @@ function AddNewComment() {
 
         setPros(prosValues);
 
-        // add a new input field
-        if(!pros[index]['executed']) {
+
+
+        if (!pros[index]['executed']) {  // add a new input field
 
             let newfield = { value: '', executed: false }
             setPros([...pros, newfield])
 
             // set interaction to true
             prosValues[index]['executed'] = true;
-            // setPros(prosValues);
-            
+
         }
-        if (pros[index][name].length === 0 && index != 0 ) {
+        if (pros[index][name].length === 0 && index != 0) { // remove next input field if the current is empty
             prosValues[index]['executed'] = false;
-        
+
             let emptyIndex = [];
             const x = pros.forEach((x, index) => {
-                if(!x.executed) {
+                if (!x.executed) {
                     emptyIndex.push(index + 1)
                 }
             })
-
+            
+            // get the lowest number, its always the first
             const removeInputs = pros.length - emptyIndex[0];
 
             // removing the element using splice
@@ -419,7 +420,7 @@ function AddNewComment() {
 
 
         }
-        
+
 
     };
 
