@@ -63,7 +63,7 @@ export default function Reviews({ comments, totalComments }) {
                                                                                 ? <Icon as={IoAddCircleSharp} color='green' fontSize={'28px'} />
                                                                                 : <Icon as={IoRemoveCircleSharp} color='red' fontSize={'28px'} />
                                                                             }
-                                                                                <Text ml='1rem'>{values.value + index}</Text>
+                                                                                <Text ml='1rem'>{values.value}</Text>
                                                                             </Flex>
                                                                     )
                                                                 })
