@@ -57,7 +57,6 @@ const Main = ({children, router}) => {
                     overlayClasses='cookieConsent-overlay'
                     overlayStyle={{backgroundColor: 'rgba(255,255,255,0.95)'}}
                     buttonStyle={{background: "#1a73e8", color: "white", padding: '15px 35px', borderRadius: "30px"}}
-                    debug={true}
                     cookieName='Analytics'
                     ariaAcceptLabel='Accept'
                     ariaDeclineLabel='Decline'
