@@ -47,6 +47,9 @@ export default function Page({ images: defaultImages, nextCursor: defaultNextCur
     const [comments, setComments] = useState(defaultComments)
     const [commentsEnd, setCommentsEnd] = useState(false)
 
+    const [reviewButton, setReviewButton] = useState(false)
+    const [reviewSubmit, setReviewSubmit] = useState(false)
+
 
 
 
@@ -270,11 +273,18 @@ export default function Page({ images: defaultImages, nextCursor: defaultNextCur
 
                 {commentsEnd && <Text textAlign='center' mt="2rem">No more comments to load.</Text>}
                 <Box maxW='container.md' m="0 auto">
-                    <Heading size="md" mt="8vh" mb="2vh">
-                        Share your experience:
-                    </Heading>
-                    <AddNewComment/>
-
+                    {
+                        reviewButton &&
+                        <Box mt='50px'>
+                             <Heading size="md" mt="8vh" mb="2vh">
+                                Write a review:
+                            </Heading>
+                            <AddNewComment />
+                        </Box>
+                    }
+                    <Box textAlign={'center'}>
+                        <Button mt='50px' variant={reviewButton ? 'link' : "outline"} onClick={() => setReviewButton(current => !current)}>{reviewButton ? 'Close review form' : "Write a review"}</Button>
+                    </Box>
                 </Box>
             </Box>
 
@@ -456,7 +466,6 @@ function AddNewComment() {
     return (
         <form onSubmit={addComment}>
             <Box display={submitted ? 'none' : 'block'}>
-
                 <StarsRating
                     allowHalf={false}
                     symbol={<Icon as={IoStar} fontSize='85px' />}
