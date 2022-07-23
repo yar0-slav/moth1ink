@@ -16,7 +16,7 @@ export default function Reviews({ comments, totalComments }) {
                 {
                     comments && comments.length > 0 ?
                         comments.map((comment, i) => {
-                            const { filteredValues } = comment
+                            const { filteredValues, time } = comment
                             // const filtered = pros.reduce((result, { value, executed }) => executed ? result.push(value) && result : result, []);
 
                             return (
@@ -36,7 +36,7 @@ export default function Reviews({ comments, totalComments }) {
                                             />
                                         </Box>
                                         <Text fontSize={13}>
-                                            {(moment(comment.time).locale('sk-SK').calendar())}
+                                            {(moment(time).locale('sk-SK').calendar())}
                                         </Text>
                                     </Box>
                                     <Box>
@@ -63,7 +63,7 @@ export default function Reviews({ comments, totalComments }) {
                                                                                 ? <Icon as={IoAddCircleSharp} color='green' fontSize={'28px'} />
                                                                                 : <Icon as={IoRemoveCircleSharp} color='red' fontSize={'28px'} />
                                                                             }
-                                                                                <Text ml='1rem'>{values.value}</Text>
+                                                                                <Text ml='1rem'>{values.value + index}</Text>
                                                                             </Flex>
                                                                     )
                                                                 })

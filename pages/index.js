@@ -63,8 +63,9 @@ export default function Page({ images: defaultImages, nextCursor: defaultNextCur
             .startAfter(cursor)
             .limit(LIMIT)
 
-        const newComments = (await query.get()).docs.map((doc) => { return { id: doc.id, ...doc.data() } });
+        const newComments = (await query.get()).docs.map(postToJSON);
 
+        console.log(newComments)
         setComments(comments.concat(newComments));
 
         if (newComments.length < LIMIT) {
@@ -583,6 +584,8 @@ export async function getServerSideProps() {
 
 
     const comments = (await postsQuery.get()).docs.map(postToJSON);
+
+    console.log(comments)
 
     const commentsTotal = (await postsTotal.get()).docs.map(postToJSON);
 
