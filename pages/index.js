@@ -48,7 +48,6 @@ export default function Page({ images: defaultImages, nextCursor: defaultNextCur
     const [commentsEnd, setCommentsEnd] = useState(false)
 
     const [reviewButton, setReviewButton] = useState(false)
-    const [reviewSubmit, setReviewSubmit] = useState(false)
 
 
 
@@ -382,7 +381,7 @@ function AddNewComment() {
 
 
     // Validation
-    const isValid = username.length > 3 && username.length < 100 && starRating > 0 && (values[0].inputValues[0].value.length > 0 || values[1].inputValues[0].value.length > 0);
+    const isValid = username.length >= 3 && username.length < 100 && starRating > 0 && (values[0].inputValues[0].value.length > 0 || values[1].inputValues[0].value.length > 0);
 
     const addComment = async (e) => {
         e.preventDefault();
@@ -434,6 +433,7 @@ function AddNewComment() {
         }
 
         // remove next input field if the current is empty
+/*
 
         if (values[columnIndex]['inputValues'][innerObjectIndex][name].length === 0 && innerObjectIndex >= 0) { 
 
@@ -449,7 +449,10 @@ function AddNewComment() {
             });
             
             // get the lowest number
-            const removeInputs = data[columnIndex]['inputValues'].length - Math.min(...emptyIndex);
+            const removeInputs = data[columnIndex]['inputValues'].length - Math.max(...emptyIndex);
+
+            console.log(Math.max(...emptyIndex))
+            console.log(innerObjectIndex)
             
             // removing the element using splice
             data[columnIndex]['inputValues'].splice(innerObjectIndex, removeInputs);
@@ -458,7 +461,7 @@ function AddNewComment() {
             setValues(data);
 
         }
-
+*/
 
     };
 
@@ -466,6 +469,7 @@ function AddNewComment() {
     return (
         <form onSubmit={addComment}>
             <Box display={submitted ? 'none' : 'block'}>
+                
                 <StarsRating
                     allowHalf={false}
                     symbol={<Icon as={IoStar} fontSize='85px' />}
@@ -501,7 +505,7 @@ function AddNewComment() {
                                                             onChange={(event) => {
                                                                 handleChange(event, columnIndex, innerObjectIndex);
                                                             }}
-                                                            placeholder={'Write ' + outerArray.column.slice(0, -1) + ' number '+ (innerObjectIndex + 1) + ' here.'}
+                                                            placeholder={'Write ' + outerArray.column.slice(0, -1) + ' n. '+ (innerObjectIndex + 1) + ' here.'}
                                                         />
                                                     </InputGroup>
                                                 )
@@ -516,7 +520,7 @@ function AddNewComment() {
                 </Flex>
 
                 <Box>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>Name *</FormLabel>
                     <Input
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
