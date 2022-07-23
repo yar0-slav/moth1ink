@@ -16,11 +16,11 @@ export default function Reviews({ comments, totalComments }) {
                 {
                     comments && comments.length > 0 ?
                         comments.map((comment, i) => {
-                            const { values } = comment
+                            const { filteredValues } = comment
                             // const filtered = pros.reduce((result, { value, executed }) => executed ? result.push(value) && result : result, []);
 
                             return (
-                                <Container commentid={comment.id} maxW={"container.md"} background="#252525" p={5} rounded="base" my="10px">
+                                <Container commentid={comment.id} key={comment.id} maxW={"container.md"} background="#252525" p={5} rounded="base" my="10px">
                                     {
                                         totalComments >= 50 ? i + 1 : ""
                                     }
@@ -51,14 +51,14 @@ export default function Reviews({ comments, totalComments }) {
                                         }
                                         <Flex my='10px'>
                                             {
-                                                values.map(inner => {
+                                                filteredValues.map(inner => {
                                                     var innerIndex = inner.column === 'pros' ? 0 : 1;
                                                     return (
-                                                        <Box flexBasis={'49%'}>
+                                                        <Box flexBasis={'49%'} key={inner.column}>
                                                             {
-                                                                inner.inputValues.map(values => {
+                                                                inner.inputValues.map((values, index) => {
                                                                     return (
-                                                                        <Flex mb={'.5rem'}>
+                                                                        <Flex mb={'.5rem'} key={values.value + index}>
                                                                             {innerIndex === 0
                                                                                 ? <Icon as={IoAddCircleSharp} color='green' fontSize={'28px'} />
                                                                                 : <Icon as={IoRemoveCircleSharp} color='red' fontSize={'28px'} />

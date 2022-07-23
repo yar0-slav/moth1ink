@@ -273,7 +273,7 @@ export default function Page({ images: defaultImages, nextCursor: defaultNextCur
                     <Heading size="md" mt="8vh" mb="2vh">
                         Share your experience:
                     </Heading>
-                    <AddNewComment  activeIndex={0}/>
+                    <AddNewComment/>
 
                 </Box>
             </Box>
@@ -379,8 +379,7 @@ function AddNewComment() {
 
         const ref = firestore.collection('comments');
 
-        // remove empty values from arrays 
-        values = values.map((x) => { 
+        let filteredValues = values.map((x) => { 
             let filtered = x.inputValues.filter(y => y.value);
             return {...x, inputValues: filtered}
         });
@@ -390,7 +389,7 @@ function AddNewComment() {
             username,
             content,
             starRating,
-            values,
+            filteredValues,
             time: serverTimestamp(),
         };
 
@@ -469,12 +468,11 @@ function AddNewComment() {
                             values.map((outerArray, columnIndex) => {
                                 return (
                                     <Box flexBasis={'49%'}>
-                                        <FormLabel>{columnIndex === 0 ? 'Pros' : 'Cons'}</FormLabel>
+                                        <FormLabel key={columnIndex}> {columnIndex === 0 ? 'Pros' : 'Cons'} </FormLabel>
                                         {
-
                                             outerArray.inputValues.map((innerArray, innerObjectIndex) => {
                                                 return (
-                                                    <InputGroup display={'flex'} flexDirection='column'>
+                                                    <InputGroup display={'flex'} flexDirection='column' key={innerObjectIndex}>
                                                         <InputLeftElement
                                                             pointerEvents='none'
                                                             children=
