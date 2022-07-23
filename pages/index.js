@@ -467,22 +467,21 @@ function AddNewComment() {
                         {
                             values.map((outerArray, columnIndex) => {
                                 return (
-                                    <Box flexBasis={'49%'}>
-                                        <FormLabel key={columnIndex}> {columnIndex === 0 ? 'Pros' : 'Cons'} </FormLabel>
+                                    <Box flexBasis={'49%'} key={columnIndex}>
+                                        <FormLabel> {columnIndex === 0 ? 'Pros' : 'Cons'} </FormLabel>
                                         {
                                             outerArray.inputValues.map((innerArray, innerObjectIndex) => {
                                                 return (
                                                     <InputGroup display={'flex'} flexDirection='column' key={innerObjectIndex}>
                                                         <InputLeftElement
                                                             pointerEvents='none'
-                                                            children=
+                                                        >
                                                             {
                                                                 columnIndex === 0 ?
                                                                     <Icon as={IoAddCircleSharp} color={'green'} fontSize={'28px'} />
                                                                     :
                                                                     <Icon as={IoRemoveCircleSharp} color={'red'} fontSize={'28px'} />
                                                             }
-                                                        >
                                                         </InputLeftElement>
                                                         <Input
                                                             value={values[columnIndex].inputValues.value}
