@@ -22,10 +22,11 @@ import toast from 'react-hot-toast';
 import StarsRating from 'react-star-rate';
 
 import { Icon } from '@chakra-ui/react'
-import { IoAddCircleSharp, IoStar } from 'react-icons/io5'
+import { IoRemoveCircleSharp, IoAddCircleSharp, IoStar } from 'react-icons/io5'
 
 
 import * as ga from '../lib/ga'
+
 
 // Max comments to query
 const LIMIT = 5;
@@ -272,7 +273,7 @@ export default function Page({ images: defaultImages, nextCursor: defaultNextCur
                     <Heading size="md" mt="8vh" mb="2vh">
                         Share your experience:
                     </Heading>
-                    <AddNewComment />
+                    <AddNewComment  activeIndex={0}/>
 
                 </Box>
             </Box>
@@ -345,26 +346,51 @@ function AddNewComment() {
     const [starRating, setStartRating] = useState('')
 
 
+    const [values, setValues] = useState(
+        [
+            {
+                column: 'pros',
+                inputValues: [
+                    {
+                        value: '',
+                        executed: false
 
-    const [pros, setPros] = useState([
-        { value: '', executed: false }
-    ]);
+                    }
+                ]
+            },
+            {
+                column: 'cons',
+                inputValues: [
+                    {
+                        value: '',
+                        executed: false
+                    }
+                ]
+            }
+        ]
+    );
 
 
     // Validation
-    const isValid = username.length > 3 && username.length < 100;
+    const isValid = username.length > 3 && username.length < 100 && starRating > 0 && (values[0].inputValues[0].value.length > 0 || values[1].inputValues[0].value.length > 0);
 
     const addComment = async (e) => {
         e.preventDefault();
 
         const ref = firestore.collection('comments');
 
+        // remove empty values from arrays 
+        values = values.map((x) => { 
+            let filtered = x.inputValues.filter(y => y.value);
+            return {...x, inputValues: filtered}
+        });
+
 
         const data = {
             username,
             content,
             starRating,
-            pros,
+            values,
             time: serverTimestamp(),
         };
 
@@ -376,54 +402,56 @@ function AddNewComment() {
     };
 
 
-    const handleChange = (e, index) => {
-
-
+    const handleChange = (e, columnIndex, innerObjectIndex ) => {
+        
         const { name, value } = e.target;
-        let prosValues = [...pros];
-
-        // find current index + name and set the target value 
-        prosValues[index][name] = value;
-
-        setPros(prosValues);
+        
+        let data = [...values]
+        data[columnIndex]['inputValues'][innerObjectIndex][name] = value;
+        setValues(data)
 
 
+        if (!values[columnIndex]['inputValues'][innerObjectIndex]['executed']) {  // add a new input field
 
-        if (!pros[index]['executed']) {  // add a new input field
+            setValues(values.map((elem, arrayIndex) => {
+                let newfield = { value: '', executed: false }
+                return arrayIndex === columnIndex
+                 ? {...elem, inputValues: [...elem.inputValues, newfield]}
+                 : elem
+            }))
 
-            let newfield = { value: '', executed: false }
-            setPros([...pros, newfield])
-
-            // set interaction to true
-            prosValues[index]['executed'] = true;
+            data[columnIndex]['inputValues'][innerObjectIndex]['executed'] = true;
 
         }
-        if (pros[index][name].length === 0 && index != 0) { // remove next input field if the current is empty
-            prosValues[index]['executed'] = false;
 
+        // remove next input field if the current is empty
+
+        if (values[columnIndex]['inputValues'][innerObjectIndex][name].length === 0 && innerObjectIndex >= 0) { 
+
+            // set the current object to false 
+            data[columnIndex]['inputValues'][innerObjectIndex]['executed'] = false;
+
+            // get the index of all the executed false objects
             let emptyIndex = [];
-            const x = pros.forEach((x, index) => {
+            values[columnIndex]['inputValues'].forEach((x, index) => {
                 if (!x.executed) {
                     emptyIndex.push(index + 1)
                 }
-            })
+            });
             
-            // get the lowest number, its always the first
-            const removeInputs = pros.length - emptyIndex[0];
-
+            // get the lowest number
+            const removeInputs = data[columnIndex]['inputValues'].length - Math.min(...emptyIndex);
+            
             // removing the element using splice
-            prosValues.splice(index, removeInputs);
+            data[columnIndex]['inputValues'].splice(innerObjectIndex, removeInputs);
 
             // updating the list
-            setPros(prosValues);
-            prosValues[index]['executed'] = false;
-
+            setValues(data);
 
         }
 
 
     };
-
 
 
     return (
@@ -437,34 +465,48 @@ function AddNewComment() {
                 />
 
                 <Flex mt='1rem' mb='2rem'>
-                    <Box flexBasis={'49%'} className='input-field--pros'>
-                        <FormLabel>Pros</FormLabel>
-
                         {
-                            pros.map((input, index) => {
+                            values.map((outerArray, columnIndex) => {
                                 return (
-                                    <InputGroup display={'flex'} flexDirection='column' key={index}>
-                                        <InputLeftElement
-                                            pointerEvents='none'
-                                            children={<Icon as={IoAddCircleSharp} color={'green'} fontSize={'28px'} />}
-                                        >
-                                        </InputLeftElement>
-                                        <Input
-                                            value={input[index]}
-                                            order={0}
-                                            variant='unstyled'
-                                            name='value'
-                                            onChange={(event) => {
-                                                handleChange(event, index);
-                                            }}
-                                            placeholder="Type your name here"
-                                            mb="15px"
-                                        />
-                                    </InputGroup>
+                                    <Box flexBasis={'49%'}>
+                                        <FormLabel>{columnIndex === 0 ? 'Pros' : 'Cons'}</FormLabel>
+                                        {
+
+                                            outerArray.inputValues.map((innerArray, innerObjectIndex) => {
+                                                return (
+                                                    <InputGroup display={'flex'} flexDirection='column'>
+                                                        <InputLeftElement
+                                                            pointerEvents='none'
+                                                            children=
+                                                            {
+                                                                columnIndex === 0 ?
+                                                                    <Icon as={IoAddCircleSharp} color={'green'} fontSize={'28px'} />
+                                                                    :
+                                                                    <Icon as={IoRemoveCircleSharp} color={'red'} fontSize={'28px'} />
+                                                            }
+                                                        >
+                                                        </InputLeftElement>
+                                                        <Input
+                                                            value={values[columnIndex].inputValues.value}
+                                                            variant='unstyled'
+                                                            name='value'
+                                                            lineHeight={'36px'}
+                                                            columnIndex={columnIndex}
+                                                            onChange={(event) => {
+                                                                handleChange(event, columnIndex, innerObjectIndex);
+                                                            }}
+                                                            placeholder={'Write ' + outerArray.column.slice(0, -1) + ' number '+ (innerObjectIndex + 1) + ' here.'}
+                                                        />
+                                                    </InputGroup>
+                                                )
+                                            })
+
+                                        }
+                                    </Box>
+
                                 )
                             })
                         }
-                    </Box>
                 </Flex>
 
                 <Box>
