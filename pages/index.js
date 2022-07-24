@@ -381,7 +381,7 @@ function AddNewComment() {
 
 
     // Validation
-    const isValid = username.length >= 3 && username.length < 100 && starRating > 0 && (values[0].inputValues[0].value.length > 0 || values[1].inputValues[0].value.length > 0);
+    const isValid = username.length >= 3 && username.length < 100 && starRating > 0 && content.length >= 4;
 
     const addComment = async (e) => {
         e.preventDefault();
@@ -525,7 +525,7 @@ function AddNewComment() {
                         mb="15px"
                     />
 
-                    <FormLabel>Comment (optional)</FormLabel>
+                    <FormLabel>Comment *</FormLabel>
                     <Textarea
                         value={content}
                         overflow='hidden'

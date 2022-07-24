@@ -3,7 +3,10 @@ import {Container, Heading, Flex, Image, Box, Link, Button} from '@chakra-ui/rea
 import {ArrowBackIcon} from '@chakra-ui/icons'
 import NextLink from 'next/link'
 
+
 const Meetmoth = () => {
+    const imageSize = {base: '100px',md:'150px'}
+
     return (
         <Container maxW="container.md" minH='calc(100vh - 56px - 2rem)' display={{base: 'initial', md: 'flex'}}
                    alignItems='center'>
@@ -18,11 +21,22 @@ const Meetmoth = () => {
                             </Button>
                         </NextLink>
                     </Flex>
-                    <Heading as='h3' size='3xl' mb={5}>
-                        Hello, wanderer!
-                    </Heading>
+                    <Flex textAlign='center' mt={5} justifyContent='space-between'>
+                        <Heading as='h3' size='3xl' mb={5} alignSelf='center'>
+                            Hello, wanderer!
+                        </Heading>
+                        <Box
+                            borderColor="whiteAlpha.800"
+                            display="inline-block"
+                            overflow='hidden'
+                        >
+                            <Image display='inline-block' h={imageSize} w={imageSize} borderRadius='35px' src='/moth-ink.png'
+                                alt='Moth1nk Profile Picture' objectFit='cover' objectPosition='0 -5px'></Image>
+                        </Box>
+                    </Flex>
+
                     <Box
-                        p={{base: "20px", md: '25px'}}
+                        p={{ base: "20px", md: '25px'}}
                         borderRadius={{base: 'inital', md: '20px'}}
                         mb={5}
                     >
@@ -65,18 +79,6 @@ const Meetmoth = () => {
                                 email, Instagram DMs, fax, or damn even send me a letter on a dragon - it is up to you.
                                 Looking forward to portray your unique story onto your skin.
                             </p>
-                        </Box>
-                        <Box textAlign='center' mt={5}>
-                            <Box
-                                borderColor="whiteAlpha.800"
-                                w="10em"
-                                h="10em"
-                                display="inline-block"
-                                overflow='hidden'
-                            >
-                                <Image display='inline-block' h='100%' w='100%' borderRadius='35px' src='/moth-ink.png'
-                                       alt='Moth1nk Profile Picture' objectFit='cover' objectPosition='45% 1%'></Image>
-                            </Box>
                         </Box>
                     </Box>
                 </Box>
