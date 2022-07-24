@@ -37,7 +37,14 @@ export default function Reviews({ comments, totalComments }) {
                                             />
                                         </Box>
                                         <Text fontSize={13}>
-                                            {(moment(time).locale('sk-SK').calendar())}
+                                            {(moment(time).locale('sk-SK').calendar(null, {
+                                                lastDay: '[Yesterday at] HH:mm',
+                                                sameDay: '[Today at] HH:mm',
+                                                nextDay: '[Tomorrow at] HH:mm',
+                                                lastWeek: '[last] dddd [at] HH:mm',
+                                                nextWeek: 'dddd [at] HH:mm',
+                                                sameElse: 'L'
+                                            }))}
                                         </Text>
                                     </Box>
                                     <Box>

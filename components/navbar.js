@@ -7,9 +7,13 @@ import {
     useColorModeValue
 } from '@chakra-ui/react'
 
+import { gsap } from "gsap/dist/gsap";
+import { ScrollToPlugin } from "gsap/dist/ScrollToPlugin";
+
 import * as ga from "../lib/ga";
 
 const LinkItem = ({ href, path, target, children, ...props }) => {
+    gsap.registerPlugin(ScrollToPlugin);
 
     const active = path === href
     const inactiveColor = useColorModeValue('gray200', 'whiteAlpha.900')
@@ -37,10 +41,15 @@ const Navbar = props => {
     const clickItem = (data) => {
         ga.event({
             action: "click",
-            params : {
+            params: {
                 item: data
             }
         })
+    }
+
+    const scrollToEl = (e) => {
+        const target = e.getAttribute('scrollTo');
+        gsap.to(window, { duration: .2, scrollTo: { y: target, offsetY: 50 } });
     }
 
     return (
@@ -65,16 +74,71 @@ const Navbar = props => {
                     alignItems="right"
                     justify="right"
                     flexGrow={1}
+                    spacing='30px'
                 >
                     <LinkItem href="/meetmoth"
-                              path={path}
-                              px={0}
-                              data-ga='Meet Moth Page'
-                              onClick={(e) => clickItem(e.target.getAttribute('data-ga'))}
+                        path={path}
+                        px={0}
+                        data-ga='Meet Moth Page'
+                        onClick={(e) => clickItem(e.target.getAttribute('data-ga'))}
 
                     >
                         Meet Moth
                     </LinkItem>
+                    <Box
+                        path={path}
+                        px={0}
+                        scrollTo='#gallery'
+                        data-ga='Galery'
+                        onClick={(e) => {
+                            clickItem(e.target.getAttribute('data-ga'))
+                            scrollToEl(e.target)
+                        }}
+                        cursor='pointer'
+                        alignSelf={'center'}
+                        _hover={{
+                            textDecor: 'underline'
+                        }}
+
+                    >
+                        Gallery
+                    </Box>
+                    <Box
+                        path={path}
+                        px={0}
+                        scrollTo='#reviews'
+                        data-ga='Reviews'
+                        onClick={(e) => {
+                            clickItem(e.target.getAttribute('data-ga'))
+                            scrollToEl(e.target)
+                        }}
+                        cursor='pointer'
+                        alignSelf={'center'}
+                        _hover={{
+                            textDecor: 'underline'
+                        }}
+
+                    >
+                        Reviews
+                    </Box>
+                    <Box
+                        path={path}
+                        px={0}
+                        scrollTo='#contact'
+                        data-ga='Contact'
+                        onClick={(e) => {
+                            clickItem(e.target.getAttribute('data-ga'))
+                            scrollToEl(e.target)
+                        }}
+                        cursor='pointer'
+                        alignSelf={'center'}
+                        _hover={{
+                            textDecor: 'underline'
+                        }}
+
+                    >
+                        Contact
+                    </Box>
 
                 </Stack>
 

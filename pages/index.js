@@ -65,7 +65,6 @@ export default function Page({ images: defaultImages, nextCursor: defaultNextCur
 
         const newComments = (await query.get()).docs.map(postToJSON);
 
-        console.log(newComments)
         setComments(comments.concat(newComments));
 
         if (newComments.length < LIMIT) {
@@ -184,7 +183,7 @@ export default function Page({ images: defaultImages, nextCursor: defaultNextCur
             <IndexContent></IndexContent>
 
             <Container maxW="container.lg" mt='30vh' px={0} className="second-container opacity-container"
-                justifyContent='space-between'>
+                justifyContent='space-between' id='gallery'>
                 <Box className='opacity-wrapper'>
                     <Box py='2em' justifyContent='space-around' display='flex' flexWrap='wrap' onClick={handleOnFolderClick}>
                         <Box key='""' p={2} >
@@ -259,8 +258,8 @@ export default function Page({ images: defaultImages, nextCursor: defaultNextCur
                 </Box>
             </Container>
 
-            <Box>
-                <Heading my="5vh">
+            <Box id='reviews'> 
+                <Heading my="5vh" >
                     Reviews {commentsTotal.length >= 50 ? `(${commentsTotal.length})` : ""}
                 </Heading>
 
@@ -289,7 +288,7 @@ export default function Page({ images: defaultImages, nextCursor: defaultNextCur
             </Box>
 
 
-            <Container maxW='container.md' p={0} my='26vh'>
+            <Container maxW='container.md' p={0} my='26vh' id='contact'>
                 <Box textAlign='center' mb={8 * 2}>
                     <Heading as='h1' size='4xl'>
                         Lets get weird
@@ -451,9 +450,6 @@ function AddNewComment() {
             
             // get the lowest number
             const removeInputs = data[columnIndex]['inputValues'].length - Math.max(...emptyIndex);
-
-            console.log(Math.max(...emptyIndex))
-            console.log(innerObjectIndex)
             
             // removing the element using splice
             data[columnIndex]['inputValues'].splice(innerObjectIndex, removeInputs);
@@ -584,8 +580,6 @@ export async function getServerSideProps() {
 
 
     const comments = (await postsQuery.get()).docs.map(postToJSON);
-
-    console.log(comments)
 
     const commentsTotal = (await postsTotal.get()).docs.map(postToJSON);
 

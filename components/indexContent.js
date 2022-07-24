@@ -7,7 +7,6 @@ import VoxelDogLoader from '../components/model-loader'
 import SocialSidebar from "../components/SocialSidebar";
 import dynamic from "next/dynamic";
 import React, { useEffect } from "react";
-import Section from "./section";
 
 import { IoChevronDown } from 'react-icons/io5'
 
@@ -21,10 +20,13 @@ const LazyVoxelDog = dynamic(() => import('../components/model-custom'), {
 })
 
 const IndexContent = () => {
+
     const iconSize = '3em';
     const router = useRouter();
- 
+
     useEffect(() => {
+
+
 
         if (typeof window !== "undefined") {
             gsap.registerPlugin(ScrollTrigger);
@@ -33,7 +35,7 @@ const IndexContent = () => {
         const homepage = '[data-page=homepage]'
 
         // background color change
-        gsap.set(homepage, {backgroundColor: '#FF005C',});
+        gsap.set(homepage, {backgroundColor: '#000'});
 
         ScrollTrigger.create({
             trigger: '.second-container',
