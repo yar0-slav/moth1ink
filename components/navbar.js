@@ -48,8 +48,8 @@ const Navbar = props => {
     }
 
     const scrollToEl = (e) => {
-        const target = e.getAttribute('scrollTo');
-        gsap.to(window, { duration: .2, scrollTo: { y: target, offsetY: 50 } });
+        const target = e.getAttribute('scrollto');
+        gsap.to(window, { duration: .1, scrollTo: { y: target, offsetY: 50 } });
     }
 
     return (
@@ -88,7 +88,7 @@ const Navbar = props => {
                     <Box
                         path={path}
                         px={0}
-                        scrollTo='#gallery'
+                        scrollto='#gallery'
                         data-ga='Galery'
                         onClick={(e) => {
                             clickItem(e.target.getAttribute('data-ga'))
@@ -106,7 +106,7 @@ const Navbar = props => {
                     <Box
                         path={path}
                         px={0}
-                        scrollTo='#reviews'
+                        scrollto='#reviews'
                         data-ga='Reviews'
                         onClick={(e) => {
                             clickItem(e.target.getAttribute('data-ga'))

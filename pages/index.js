@@ -182,7 +182,7 @@ export default function Page({ images: defaultImages, nextCursor: defaultNextCur
         <Container className='index__content' maxW={"container.lg"} color={'white'} p={0}>
             <IndexContent></IndexContent>
 
-            <Container maxW="container.lg" mt='30vh' px={0} className="second-container opacity-container"
+            <Container maxW="container.lg" mt='5em' px={0} className="second-container opacity-container"
                 justifyContent='space-between' id='gallery'>
                 <Box className='opacity-wrapper'>
                     <Box py='2em' justifyContent='space-around' display='flex' flexWrap='wrap' onClick={handleOnFolderClick}>

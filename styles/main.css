@@ -2,20 +2,24 @@ html {
     scroll-behavior: smooth;
 }
 
+/*
 body {
     overflow-y: scroll;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none; 
+    -ms-overflow-style: none;  
 }
+
+body::-webkit-scrollbar { 
+    width: 0;
+    height: 0;
+}
+
+*/
 
 button {
     box-shadow: none !important;
 }
 
-body::-webkit-scrollbar { /* WebKit */
-    width: 0;
-    height: 0;
-}
 
 .socials_sidebar {
     writing-mode: vertical-lr;

@@ -1,11 +1,9 @@
 import { gsap } from "gsap/dist/gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 
-import { Box, Heading, Icon } from '@chakra-ui/react';
+import { Box, Heading, Icon, Text } from '@chakra-ui/react';
 
-import VoxelDogLoader from '../components/model-loader'
 import SocialSidebar from "../components/SocialSidebar";
-import dynamic from "next/dynamic";
 import React, { useEffect } from "react";
 
 import { IoChevronDown } from 'react-icons/io5'
@@ -14,12 +12,9 @@ import { IoChevronDown } from 'react-icons/io5'
 
 import { useRouter } from 'next/router'
 
-const LazyVoxelDog = dynamic(() => import('../components/model-custom'), {
-    ssr: false,
-    loading: () => <VoxelDogLoader/>
-})
 
 const IndexContent = () => {
+    // const [ background, setBackground] = useState('')
 
     const iconSize = '3em';
     const router = useRouter();
@@ -35,11 +30,11 @@ const IndexContent = () => {
         const homepage = '[data-page=homepage]'
 
         // background color change
-        gsap.set(homepage, {backgroundColor: '#000'});
+        gsap.set(homepage, {backgroundColor: '#FF005C'});
 
         ScrollTrigger.create({
             trigger: '.second-container',
-            start: 'top 75%',
+            start: 'top 25%',
             onEnter: () =>
                 gsap.to(homepage, {
                     backgroundColor: '#000'
@@ -61,8 +56,8 @@ const IndexContent = () => {
 
             ScrollTrigger.create({
                 trigger: elem,
-                start: 'top 75%',
-                end: 'bottom 50%',
+                start: 'top 25%',
+                end: 'bottom 25%',
                 onEnter: () => gsap.to(x, {opacity: 1}),
                 onLeaveBack: () => gsap.to(x, {opacity: 0}),
                 onEnterBack: () => gsap.to(x, {opacity: 1}),
@@ -74,7 +69,7 @@ const IndexContent = () => {
                 ease: "none",
                 scrollTrigger: {
                     trigger: elem,
-                    start: "top 50%",
+                    start: "bottom 50%",
                     end: 'bottom 50%',
                     scrub: 1
                 },
@@ -84,8 +79,8 @@ const IndexContent = () => {
 
         ScrollTrigger.create({
             trigger: '.first_section',
-            start: 'top 75%',
-            end: 'bottom 40%',
+            start: 'top 19%',
+            end: 'bottom 19%',
             onEnter: () => gsap.to('.first_section', {opacity: 1}),
             onLeave: () => gsap.to('.first_section', {opacity: 0}),
             onLeaveBack: () => gsap.to('.first_section', {opacity: 0}),
@@ -93,7 +88,7 @@ const IndexContent = () => {
         });
 
 
-        gsap.to('.bounceChevron--hp', {duration: .8, y:1, ease:"sine.easeIn", repeat:-1, yoyo:true})
+        gsap.to('.bounceChevron--hp', {duration: .5, y:6, ease:"none", repeat:-1, yoyo:true})
 
 
         const handleRouteChange = (url) => {
@@ -117,7 +112,6 @@ const IndexContent = () => {
                 flexDirection='column' 
             >
 
-                <LazyVoxelDog/>
 
                 <Heading as='h1' size='4xl' order={{base: '2', md: 'initial'}}>
                     Hi, I am Moth,
@@ -127,9 +121,11 @@ const IndexContent = () => {
                 </Heading>
                 <SocialSidebar/>
             </Box>
-            <Box className="bounceChevron--hp" id="helpme" display='flex' placeContent={'center'} top='calc(100vh - 130px)' transform='translateY(-100%)' position={'absolute'} w='100%'>
-                <Icon as={IoChevronDown} w={iconSize} h={iconSize} color={'white'} />
+            <Box  display='flex' placeContent={'center'} flexDirection='column' alignItems='center' w='100%' top={{base: '35vh', md: '25vh'}} position={'absolute'}>
+                <Icon  className="bounceChevron--hp" as={IoChevronDown} w={iconSize} h={iconSize} color={'white'} />
+                <Text fontSize="xs">Scroll-down</Text>
             </Box>
+            
         </Box>
     )
 }

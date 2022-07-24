@@ -3,6 +3,16 @@ import {Container, Heading, Flex, Image, Box, Link, Button} from '@chakra-ui/rea
 import {ArrowBackIcon} from '@chakra-ui/icons'
 import NextLink from 'next/link'
 
+import VoxelDogLoader from '../components/model-loader'
+import dynamic from "next/dynamic";
+
+
+const LazyVoxelDog = dynamic(() => import('../components/model-custom'), {
+    ssr: false,
+    loading: () => <VoxelDogLoader/>
+})
+
+
 
 const Meetmoth = () => {
     const imageSize = {base: '100px',md:'150px'}
@@ -34,6 +44,7 @@ const Meetmoth = () => {
                                 alt='Moth1nk Profile Picture' objectFit='cover' objectPosition='0 -5px'></Image>
                         </Box>
                     </Flex>
+                    <LazyVoxelDog/>
 
                     <Box
                         p={{ base: "20px", md: '25px'}}
