@@ -24,7 +24,7 @@ export const DogContainer = forwardRef(({ children }, ref) => (
         order={{base: '1', md: 'initial'}}
         >
         {children}
-        <Box pos='absolute' bottom='15px' left='15px'>
+        <Box pos='absolute' top='15px' right='15px'>
             <Hint />
         </Box>
     </Box>

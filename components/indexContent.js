@@ -1,13 +1,17 @@
 import { gsap } from "gsap/dist/gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 
-import { Box, Heading } from '@chakra-ui/react';
+import { Box, Heading, Icon } from '@chakra-ui/react';
 
 import VoxelDogLoader from '../components/model-loader'
 import SocialSidebar from "../components/SocialSidebar";
 import dynamic from "next/dynamic";
 import React, { useEffect } from "react";
 import Section from "./section";
+
+import { IoChevronDown } from 'react-icons/io5'
+
+
 
 import { useRouter } from 'next/router'
 
@@ -17,6 +21,7 @@ const LazyVoxelDog = dynamic(() => import('../components/model-custom'), {
 })
 
 const IndexContent = () => {
+    const iconSize = '3em';
     const router = useRouter();
  
     useEffect(() => {
@@ -77,13 +82,16 @@ const IndexContent = () => {
 
         ScrollTrigger.create({
             trigger: '.first_section',
-            start: 'top 50%',
-            end: 'bottom 50%',
+            start: 'top 75%',
+            end: 'bottom 40%',
             onEnter: () => gsap.to('.first_section', {opacity: 1}),
             onLeave: () => gsap.to('.first_section', {opacity: 0}),
             onLeaveBack: () => gsap.to('.first_section', {opacity: 0}),
             onEnterBack: () => gsap.to('.first_section', {opacity: 1}),
         });
+
+
+        gsap.to('.bounceChevron--hp', {duration: .8, y:1, ease:"sine.easeIn", repeat:-1, yoyo:true})
 
 
         const handleRouteChange = (url) => {
@@ -102,10 +110,13 @@ const IndexContent = () => {
     }, []);
 
     return (
-        <Section>
-            <Box className='first_section' borderRadius={"lg"} position='relative' display='flex'
-                flexDirection='column'
+        <Box position='relative' className='first_section'>
+            <Box borderRadius={"lg"} display='flex'
+                flexDirection='column' 
             >
+
+                <LazyVoxelDog/>
+
                 <Heading as='h1' size='4xl' order={{base: '2', md: 'initial'}}>
                     Hi, I am Moth,
                 </Heading>
@@ -113,9 +124,11 @@ const IndexContent = () => {
                     your tattoo artist.
                 </Heading>
                 <SocialSidebar/>
-                <LazyVoxelDog/>
             </Box>
-        </Section>
+            <Box className="bounceChevron--hp" id="helpme" display='flex' placeContent={'center'} top='calc(100vh - 130px)' transform='translateY(-100%)' position={'absolute'} w='100%'>
+                <Icon as={IoChevronDown} w={iconSize} h={iconSize} color={'white'} />
+            </Box>
+        </Box>
     )
 }
 

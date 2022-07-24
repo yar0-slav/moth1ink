@@ -32,7 +32,8 @@ export default function Reviews({ comments, totalComments }) {
                                             <StarsRating
                                                 defaultValue={comment.starRating}
                                                 disabled
-                                                symbol={<Icon as={IoStar} />}
+                                                symbol={<Icon as={IoStar} fontSize={{base: '30px', md:'40px'}} /> }
+                                                
                                             />
                                         </Box>
                                         <Text fontSize={13}>

@@ -473,7 +473,7 @@ function AddNewComment() {
                 
                 <StarsRating
                     allowHalf={false}
-                    symbol={<Icon as={IoStar} fontSize='85px' />}
+                    symbol={<Icon as={IoStar} fontSize={{base: '50px', md:'85px'}} />}
                     onChange={(val) => setStartRating(val)}
                 />
 
