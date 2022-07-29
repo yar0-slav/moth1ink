@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Container, Box, Heading, Flex, Text, Button, Link, Spinner, Input, InputGroup, InputLeftElement, Textarea, FormLabel } from '@chakra-ui/react';
+import { Container, Box, Heading, Flex, Text, Button, Link, Spinner } from '@chakra-ui/react';
 import Masonry from 'react-masonry-css'
 import { CopyIcon, CheckIcon } from '@chakra-ui/icons'
 
@@ -7,7 +7,7 @@ import Reviews from '../components/reviews';
 import AddNewComment from '../components/comments';
 
 
-import { firestore, fromMillis, postToJSON, serverTimestamp } from '../lib/firebase';
+import { firestore, fromMillis, postToJSON, } from '../lib/firebase';
 
 import Image from 'next/image'
 import Zoom from 'react-medium-image-zoom'
@@ -19,12 +19,6 @@ import { search, mapImageResources, getFolders } from "../lib/cloudinary";
 
 import { convertImage, toBase64 } from "../components/imagePreloader";
 
-import toast from 'react-hot-toast';
-
-import StarsRating from 'react-star-rate';
-
-import { Icon } from '@chakra-ui/react'
-import { IoRemoveCircleSharp, IoAddCircleSharp, IoStar } from 'react-icons/io5'
 
 
 import * as ga from '../lib/ga'
