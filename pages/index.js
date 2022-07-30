@@ -244,7 +244,6 @@ export default function Page({ images: defaultImages, nextCursor: defaultNextCur
                                                         height={image.height}
                                                         alt={image.title}
                                                         key={image.id}
-                                                        priority
                                                     />
                                                 </Zoom>
 
