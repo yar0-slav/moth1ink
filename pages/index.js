@@ -9,6 +9,7 @@ import AddNewComment from '../components/comments';
 
 import { firestore, fromMillis, postToJSON, } from '../lib/firebase';
 
+
 import Image from 'next/image'
 import Zoom from 'react-medium-image-zoom'
 import 'react-medium-image-zoom/dist/styles.css'
@@ -17,7 +18,6 @@ import IndexContent from "../components/indexContent";
 
 import { search, mapImageResources, getFolders } from "../lib/cloudinary";
 
-import { convertImage, toBase64 } from "../components/imagePreloader";
 
 
 
@@ -29,7 +29,7 @@ const LIMIT = 5;
 
 
 
-export default function Page({ images: defaultImages, nextCursor: defaultNextCursor, folders, totalCount: defaultTotalCount, comments: defaultComments, commentsTotal }) {
+export default function Page({ images: defaultImages, nextCursor: defaultNextCursor, folders, totalCount: defaultTotalCount, comments: defaultComments, commentsTotal  }) {
 
     const [copySuccess, setCopySuccess] = useState('');
     const textAreaRef = useRef(null);
@@ -44,7 +44,6 @@ export default function Page({ images: defaultImages, nextCursor: defaultNextCur
     const [commentsEnd, setCommentsEnd] = useState(false)
 
     const [reviewButton, setReviewButton] = useState(false)
-
 
 
 
@@ -117,7 +116,6 @@ export default function Page({ images: defaultImages, nextCursor: defaultNextCur
 
             const images = mapImageResources(resources)
 
-
             setImages(images);
             setNextCursor(updatedNextCursor)
             setTotalCount(updatedTotalCount)
@@ -177,7 +175,6 @@ export default function Page({ images: defaultImages, nextCursor: defaultNextCur
     return (
         <Container className='index__content' maxW={"container.lg"} color={'white'} p={0}>
             <IndexContent></IndexContent>
-
             <Container maxW="container.lg" mt='5em' px={0} className="second-container opacity-container"
                 justifyContent='space-between' id='gallery'>
                 <Box className='opacity-wrapper'>
@@ -220,19 +217,37 @@ export default function Page({ images: defaultImages, nextCursor: defaultNextCur
                         style={{ minHeight: 50 + 'vh' }}
                     >
                         {
-                            images && images.length > 0 ?
+                            images[0] && images[0].src.length > 0 ?
                                 images.map(image => {
                                     return (
-                                        <Zoom key={image.id}>
-                                            <Image src={image.src} width={image.width} height={image.height}
-                                                alt={image.title}
-                                                key={image.id}
-                                                placeholder="blur"
-                                                blurDataURL={`data:image/svg+xml;base64,${toBase64(
-                                                    convertImage(`${image.width}, ${image.height}`)
-                                                )}`}
-                                            />
-                                        </Zoom>
+                                        <div style={{
+                                            position: 'relative',
+                                            height: 0,
+                                            paddingTop: `${(image.height / image.width) * 100}%`,
+                                            backgroundImage: `url(${image.urlBlurred})`,
+                                            backgroundPosition: 'center center',
+                                            backgroundSize: `100%`,
+                                            marginBottom: '8px'
+                                        }}>
+                                            <div style={{
+                                                position: 'absolute',
+                                                top: 0,
+                                                left: 0
+                                            }}>
+                                                <Zoom key={image.id}>
+
+                                                    <Image
+                                                        src={image.src}
+                                                        width={image.width}
+                                                        height={image.height}
+                                                        alt={image.title}
+                                                        key={image.id}
+                                                        priority
+                                                    />
+                                                </Zoom>
+
+                                            </div>
+                                        </div>
                                     )
 
                                 })
@@ -346,16 +361,19 @@ export default function Page({ images: defaultImages, nextCursor: defaultNextCur
 
 
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
 
 
     const results = await search({
-        expression: 'folder=""'
+        expression: 'folder=""',
+        max_results: 8
     });
+
 
     const { resources, next_cursor: nextCursor, total_count: totalCount } = results;
 
-    const images = mapImageResources(resources)
+    const images = mapImageResources(resources);
+
 
 
     const { folders } = await getFolders();
@@ -370,9 +388,11 @@ export async function getServerSideProps() {
         .orderBy("time", "desc");
 
 
+
     const comments = (await postsQuery.get()).docs.map(postToJSON);
 
     const commentsTotal = (await postsTotal.get()).docs.map(postToJSON);
+  
 
 
     return {
