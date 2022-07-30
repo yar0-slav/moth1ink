@@ -228,12 +228,14 @@ export default function Page({ images: defaultImages, nextCursor: defaultNextCur
                                             backgroundPosition: 'center center',
                                             backgroundSize: `100%`,
                                             marginBottom: '8px'
-                                        }}>
+                                        }}
+                                        key={image.id}>
                                             <div style={{
                                                 position: 'absolute',
                                                 top: 0,
                                                 left: 0
-                                            }}>
+                                            }}
+                                            key={image.id}>
                                                 <Zoom key={image.id}>
 
                                                     <Image

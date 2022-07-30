@@ -1,12 +1,11 @@
 import { gsap } from "gsap/dist/gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 
-import { Box, Heading, Icon, Text } from '@chakra-ui/react';
+import { Box, Heading } from '@chakra-ui/react';
 
 import SocialSidebar from "../components/SocialSidebar";
 import React, { useEffect } from "react";
 
-import { IoChevronDown } from 'react-icons/io5'
 
 
 
