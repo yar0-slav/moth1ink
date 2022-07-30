@@ -14,7 +14,6 @@ import { useRouter } from 'next/router'
 
 const IndexContent = () => {
 
-    const iconSize = '3em';
     const router = useRouter();
 
     useEffect(() => {
