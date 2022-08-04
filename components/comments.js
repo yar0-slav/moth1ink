@@ -1,18 +1,18 @@
-import React, { useState } from 'react'
-import {Box, Flex, Text, Button, Input, InputGroup, InputLeftElement, Textarea, FormLabel } from '@chakra-ui/react';
+import { Box, Button, Flex, FormLabel, Input, InputGroup, InputLeftElement, Text, Textarea } from '@chakra-ui/react';
+import React, { useState } from 'react';
 
 
 import { firestore, serverTimestamp } from '../lib/firebase';
 
-import 'react-medium-image-zoom/dist/styles.css'
+import 'react-medium-image-zoom/dist/styles.css';
 
 
 import toast from 'react-hot-toast';
 
 import StarsRating from 'react-star-rate';
 
-import { Icon } from '@chakra-ui/react'
-import { IoRemoveCircleSharp, IoAddCircleSharp, IoStar } from 'react-icons/io5'
+import { Icon } from '@chakra-ui/react';
+import { IoAddCircleSharp, IoRemoveCircleSharp, IoStar } from 'react-icons/io5';
 
 
 
