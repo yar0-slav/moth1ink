@@ -357,7 +357,7 @@ export default function Page({
         >
           <Box>
             <Heading size="md" mb={5}>
-              Hit me up and disappoint your mom.
+              Hit me up and disappoint your mom. 
             </Heading>
           </Box>
           <Box
