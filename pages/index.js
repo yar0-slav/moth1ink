@@ -347,7 +347,7 @@ export default function Page({
       <Container maxW="container.md" p={0} my="26vh" id="contact">
         <Box textAlign="center" mb={8 * 2}>
           <Heading as="h1" size="4xl">
-            Lets get weird
+            Contact
           </Heading>
         </Box>
         <Flex
