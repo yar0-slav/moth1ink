@@ -108,7 +108,7 @@ export default function Page({
   }
 
   useEffect(() => {
-    (async function run() {
+    (async function run() {   
       const results = await fetch('/api/search', {
         method: 'POST',
         body: JSON.stringify({
@@ -320,7 +320,7 @@ export default function Page({
 
         {commentsEnd && (
           <Text textAlign="center" mt="2rem">
-            No more comments to load.
+            No more comments to load. 
           </Text>
         )}
         <Box maxW="container.md" m="0 auto">
