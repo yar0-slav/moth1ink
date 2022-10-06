@@ -10,7 +10,6 @@ import {
   Text
 } from '@chakra-ui/react'
 import React, { useEffect, useRef, useState } from 'react'
-import { useDocumentData } from 'react-firebase-hooks/firestore';
 
 import Masonry from 'react-masonry-css'
 
