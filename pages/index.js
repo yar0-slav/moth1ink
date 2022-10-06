@@ -448,6 +448,7 @@ export async function getStaticProps() {
       folders,
       comments,
       commentsTotal
-    }
-  }
+    },
+    revalidate: 5000
+  };
 }
