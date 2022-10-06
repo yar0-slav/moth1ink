@@ -10,6 +10,8 @@ import {
   Text
 } from '@chakra-ui/react'
 import React, { useEffect, useRef, useState } from 'react'
+import { useDocumentData } from 'react-firebase-hooks/firestore';
+
 import Masonry from 'react-masonry-css'
 
 import AddNewComment from '../components/comments'
@@ -47,7 +49,7 @@ export default function Page({
   const [activeFolder, setActiveFolder] = useState('')
   const [loaderActive, setLoaderActive] = useState(false)
 
-  const [comments, setComments] = useState(defaultComments)
+  const [comments, setComments] = useState(defaultComments);
   const [commentsEnd, setCommentsEnd] = useState(false)
 
   const [reviewButton, setReviewButton] = useState(false)
@@ -413,7 +415,8 @@ export default function Page({
   )
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {  
+
   const results = await search({
     expression: 'folder=""',
     max_results: 8
@@ -448,7 +451,6 @@ export async function getStaticProps() {
       folders,
       comments,
       commentsTotal
-    },
-    revalidate: 5000
+    }
   };
 }
