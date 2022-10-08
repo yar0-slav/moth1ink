@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Masonry from 'react-masonry-css'
 
 import Lightbox from "yet-another-react-lightbox";
-import "yet-another-react-lightbox/styles.css";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
 // import Zoom from 'react-medium-image-zoom'
 
 import { mapImageResources } from '../../lib/cloudinary'
@@ -130,7 +130,7 @@ export default function ImageGallery({
           {images[0] && images[0].src.length > 0 ? (
             images.map((image, index) => {
               return (
-                <Box key={image.id} pb='6px'>
+                <Box key={image.id} pb='6px' _hover={{ cursor: "pointer" }} >
                 <Image
                   alt={image.title}
                   src={image.src}
@@ -156,6 +156,11 @@ export default function ImageGallery({
           index={index}
           close={() => setIndex(-1)}
           slides={images}
+          plugins={[ Zoom ]}
+          animation={{ zoom: 300  }}
+          zoom={{
+            maxZoomPixelRatio: 1, zoomInMultiplier: 2, doubleTapDelay: 300, doubleClickDelay: 500, doubleClickMaxStops: 3, keyboardMoveDistance: 50, wheelZoomDistanceFactor: 100, pinchZoomDistanceFactor: 100, scrollToZoom: false
+          }}
           render={{
             slide: (image, offset, rect) => {
               const width = Math.round(
