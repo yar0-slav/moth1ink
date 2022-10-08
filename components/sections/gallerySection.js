@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Masonry from 'react-masonry-css'
 import Zoom from 'react-medium-image-zoom'
 
-import { getFolders, mapImageResources, search } from '../../lib/cloudinary'
+import { mapImageResources } from '../../lib/cloudinary'
 
 export default function Gallery({
   defaultImages,
@@ -76,6 +76,7 @@ export default function Gallery({
     setImages([])
     setTotalCount(0)
   }
+
   const LoadingSpinner = () => {
     useEffect(() => {
       return () => {
@@ -157,37 +158,15 @@ export default function Gallery({
           {images[0] && images[0].src.length > 0 ? (
             images.map(image => {
               return (
-                <div
-                  style={{
-                    position: 'relative',
-                    height: 0,
-                    paddingTop: `${(image.height / image.width) * 100}%`,
-                    backgroundImage: `url(${image.urlBlurred})`,
-                    backgroundPosition: 'center center',
-                    backgroundSize: `100%`,
-                    marginBottom: '8px'
-                  }}
-                  key={image.id}
-                >
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0
-                    }}
+                <Zoom key={image.id}>
+                  <Image
+                    src={image.src}
+                    width={image.width}
+                    height={image.height}
+                    alt={image.title}
                     key={image.id}
-                  >
-                    <Zoom key={image.id}>
-                      <Image
-                        src={image.src}
-                        width={image.width}
-                        height={image.height}
-                        alt={image.title}
-                        key={image.id}
-                      />
-                    </Zoom>
-                  </div>
-                </div>
+                  />
+                </Zoom>
               )
             })
           ) : (
@@ -208,30 +187,4 @@ export default function Gallery({
       </Box>
     </Container>
   )
-}
-
-export async function getServerSideProps() {
-  const results = await search({
-    expression: 'folder=""',
-    max_results: 8
-  })
-
-  const {
-    resources,
-    next_cursor: nextCursor,
-    total_count: totalCount
-  } = results
-
-  const images = mapImageResources(resources)
-
-  const { folders } = await getFolders()
-
-  return {
-    props: {
-      images,
-      nextCursor: nextCursor || false,
-      totalCount,
-      folders
-    }
-  }
 }

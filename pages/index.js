@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import 'react-medium-image-zoom/dist/styles.css'
 
+import dynamic from 'next/dynamic'
+
 import { Container } from '@chakra-ui/react'
 
-import Gallery from '../components/sections/gallerySection'
-import Reviews from '../components/sections/reviewsSection/reviewsSection'
-import Contact from '../components/sections/contactSection'
 import IndexContent from '../components/sections/indexSection/indexContent'
+const Gallery = dynamic(() => import('../components/sections/gallerySection'));
+const Reviews = dynamic(() => import('../components/sections/reviewsSection/reviewsSection'));
+const Contact = dynamic(() => import('../components/sections/contactSection'));
 
 
 import { getFolders, mapImageResources, search } from '../lib/cloudinary'
