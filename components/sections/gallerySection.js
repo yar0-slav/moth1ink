@@ -5,7 +5,6 @@ import Masonry from 'react-masonry-css'
 
 import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
-// import Zoom from 'react-medium-image-zoom'
 
 import { mapImageResources } from '../../lib/cloudinary'
 
@@ -153,14 +152,10 @@ export default function ImageGallery({
 
         <Lightbox
           open={index >= 0}
+          controller={{closeOnBackdropClick: true}}
           index={index}
           close={() => setIndex(-1)}
           slides={images}
-          plugins={[ Zoom ]}
-          animation={{ zoom: 300  }}
-          zoom={{
-            maxZoomPixelRatio: 1, zoomInMultiplier: 2, doubleTapDelay: 300, doubleClickDelay: 500, doubleClickMaxStops: 3, keyboardMoveDistance: 50, wheelZoomDistanceFactor: 100, pinchZoomDistanceFactor: 100, scrollToZoom: false
-          }}
           render={{
             slide: (image, offset, rect) => {
               const width = Math.round(
@@ -177,9 +172,9 @@ export default function ImageGallery({
                     src={image.src}
                     width={image.width}
                     height={image.height}
-                    layout="fill"
+                    placeholder="blur"
+                    blurDataURL={`data:image/jpeg;base64,${image.blurred}`}
                     loading="eager"
-                    objectFit="contain"
                     sizes={
                       typeof window !== 'undefined'
                         ? `${Math.ceil(
