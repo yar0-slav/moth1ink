@@ -4,8 +4,6 @@ import Image from 'next/image'
 import Masonry from 'react-masonry-css'
 
 import Lightbox from "yet-another-react-lightbox";
-import Zoom from "yet-another-react-lightbox/plugins/zoom";
-
 import { mapImageResources } from '../../lib/cloudinary'
 
 export default function ImageGallery({
