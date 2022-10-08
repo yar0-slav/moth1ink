@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic'
 import { Container } from '@chakra-ui/react'
 
 import IndexContent from '../components/sections/indexSection/indexContent'
-const Gallery = dynamic(() => import('../components/sections/gallerySection'));
+const ImageGallery = dynamic(() => import('../components/sections/gallerySection'));
 const Reviews = dynamic(() => import('../components/sections/reviewsSection/reviewsSection'));
 const Contact = dynamic(() => import('../components/sections/contactSection'));
 
@@ -38,14 +38,14 @@ export default function Page({
     >
       <IndexContent></IndexContent>
 
-      <Gallery
+      <ImageGallery
         defaultImages={defaultImages}
         defaultNextCursor={defaultNextCursor}
         folders={folders}
         defaultTotalCount={defaultTotalCount}
         loaderActive={loaderActive}
         setLoaderActive={setLoaderActive}
-      ></Gallery>
+      ></ImageGallery>
 
       <Reviews
         reviews={defaultReviews}
@@ -83,7 +83,7 @@ export async function getServerSideProps() {
 
   return {
     props: {
-      images,
+      images: JSON.parse(JSON.stringify(images)),
       nextCursor: nextCursor || false,
       totalCount,
       folders,

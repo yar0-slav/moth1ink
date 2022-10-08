@@ -2,11 +2,14 @@ import { Box, Button, Container, Flex, Spinner } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Masonry from 'react-masonry-css'
-import Zoom from 'react-medium-image-zoom'
+
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
+// import Zoom from 'react-medium-image-zoom'
 
 import { mapImageResources } from '../../lib/cloudinary'
 
-export default function Gallery({
+export default function ImageGallery({
   defaultImages,
   defaultNextCursor,
   folders,
@@ -18,6 +21,7 @@ export default function Gallery({
   const [nextCursor, setNextCursor] = useState(defaultNextCursor)
   const [totalCount, setTotalCount] = useState(defaultTotalCount)
   const [activeFolder, setActiveFolder] = useState('')
+  const [index, setIndex] = useState(-1);
 
   useEffect(() => {
     (async function run() {
@@ -34,7 +38,7 @@ export default function Gallery({
         total_count: updatedTotalCount
       } = results
 
-      const images = mapImageResources(resources)
+      const images = await mapImageResources(resources)
 
       setImages(images)
       setNextCursor(updatedNextCursor)
@@ -42,41 +46,7 @@ export default function Gallery({
     })()
   }, [activeFolder])
 
-  async function handleLoadMore(event) {
-    event.preventDefault()
-
-    const results = await fetch('/api/search', {
-      method: 'POST',
-      body: JSON.stringify({
-        nextCursor,
-        expression: `folder="${activeFolder || ''}"`
-      })
-    }).then(r => r.json())
-
-    const {
-      resources,
-      next_cursor: updatedNextCursor,
-      total_count: updatedTotalCount
-    } = results
-
-    const images = mapImageResources(resources)
-
-    setImages(prev => {
-      return [...prev, ...images]
-    })
-
-    setNextCursor(updatedNextCursor)
-    setTotalCount(updatedTotalCount)
-  }
-
-  function handleOnFolderClick(event) {
-    const folderPath = event.target.dataset.folderPath
-    setActiveFolder(folderPath)
-    setNextCursor(undefined)
-    setImages([])
-    setTotalCount(0)
-  }
-
+  
   const LoadingSpinner = () => {
     useEffect(() => {
       return () => {
@@ -97,6 +67,7 @@ export default function Gallery({
       />
     )
   }
+
 
   return (
     <Container
@@ -149,6 +120,7 @@ export default function Gallery({
               )
             })}
         </Box>
+
         <Masonry
           breakpointCols={3}
           className="my-masonry-grid"
@@ -156,23 +128,67 @@ export default function Gallery({
           style={{ minHeight: 50 + 'vh' }}
         >
           {images[0] && images[0].src.length > 0 ? (
-            images.map(image => {
+            images.map((image, index) => {
               return (
-                <Zoom key={image.id}>
-                  <Image
-                    src={image.src}
-                    width={image.width}
-                    height={image.height}
-                    alt={image.title}
-                    key={image.id}
-                  />
-                </Zoom>
+                <Box key={image.id} pb='6px'>
+                <Image
+                  alt={image.title}
+                  src={image.src}
+                  placeholder="blur"
+                  blurDataURL={`data:image/jpeg;base64,${image.blurred}`}
+                  width={image.width}
+                  height={image.height}
+                  pb="10px"
+                  sizes={'30vw'}
+                  layout="responsive"
+                  onClick={() => setIndex(index)}
+                />
+                </Box>
               )
             })
           ) : (
             <LoadingSpinner></LoadingSpinner>
           )}
         </Masonry>
+
+        <Lightbox
+          open={index >= 0}
+          index={index}
+          close={() => setIndex(-1)}
+          slides={images}
+          render={{
+            slide: (image, offset, rect) => {
+              const width = Math.round(
+                Math.min(rect.width, (rect.height / image.height) * image.width)
+              )
+              const height = Math.round(
+                Math.min(rect.height, (rect.width / image.width) * image.height)
+              )
+
+              return (
+                <div style={{ position: 'relative', width, height }}>
+                  <Image
+                    alt={image.title}
+                    src={image.src}
+                    width={image.width}
+                    height={image.height}
+                    layout="fill"
+                    loading="eager"
+                    objectFit="contain"
+                    sizes={
+                      typeof window !== 'undefined'
+                        ? `${Math.ceil(
+                            (image.width / window.innerWidth) * 100
+                          )}vw`
+                        : `${image.width}px`
+                    }
+                  />
+                </div>
+              )
+            }
+          }}
+        />
+
         {totalCount > images.length && (
           <Flex justifyContent="center" mt={5}>
             <Button
@@ -187,4 +203,42 @@ export default function Gallery({
       </Box>
     </Container>
   )
+
+
+  async function handleLoadMore(event) {
+    event.preventDefault()
+
+    const results = await fetch('/api/search', {
+      method: 'POST',
+      body: JSON.stringify({
+        nextCursor,
+        expression: `folder="${activeFolder || ''}"`
+      })
+    }).then(r => r.json())
+
+    const {
+      resources,
+      next_cursor: updatedNextCursor,
+      total_count: updatedTotalCount
+    } = results
+
+    const images = mapImageResources(resources)
+
+    setImages(prev => {
+      return [...prev, ...images]
+    })
+
+    setNextCursor(updatedNextCursor)
+    setTotalCount(updatedTotalCount)
+  }
+
+
+  function handleOnFolderClick(event) {
+    const folderPath = event.target.dataset.folderPath
+    setActiveFolder(folderPath)
+    setNextCursor(undefined)
+    setImages([])
+    setTotalCount(0)
+  }
+
 }
