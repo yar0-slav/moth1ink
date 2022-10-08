@@ -1,7 +1,7 @@
-import { Container, Box, Link } from '@chakra-ui/react'
+import { Box, Container, Link } from '@chakra-ui/react'
 import Image from 'next/image'
 
-import * as ga from '../lib/ga'
+import * as ga from '../../../lib/ga'
 
 const SocialSidebar = () => {
   const insta = `/socials/instagram-white.png`

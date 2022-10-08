@@ -4,7 +4,7 @@ import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
 import { Box, Heading } from '@chakra-ui/react'
 
 import React, { useEffect } from 'react'
-import SocialSidebar from '../components/SocialSidebar'
+import SocialSidebar from './SocialSidebar'
 
 import { useRouter } from 'next/router'
 
