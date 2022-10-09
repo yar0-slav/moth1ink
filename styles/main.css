@@ -16,6 +16,10 @@ body::-webkit-scrollbar {
 
 */
 
+.yarl__container {
+    touch-action: initial !important;
+}
+
 button {
     box-shadow: none !important;
 }

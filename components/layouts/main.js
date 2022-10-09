@@ -36,7 +36,7 @@ const Main = ({ children, router }) => {
       pb={8}
     >
       <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
         <meta name="description" content="Moth1nk Tattoo" />
         <meta name="author" content="yaro" />
         <link rel="apple-touch-icon" href="apple-touch-icon.png" />
