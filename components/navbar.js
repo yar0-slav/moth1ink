@@ -119,7 +119,7 @@ const Navbar = props => {
           <Box
             path={path}
             px={0}
-            scrollTo="#contact"
+            scrollto="#contact"
             data-ga="Contact"
             onClick={e => {
               clickItem(e.target.getAttribute('data-ga'))

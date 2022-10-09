@@ -3,7 +3,9 @@ import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Masonry from 'react-masonry-css'
 
-import Lightbox from "yet-another-react-lightbox";
+import * as ga from '../../lib/ga'
+
+import Lightbox from 'yet-another-react-lightbox'
 
 import { mapImageResources } from '../../lib/cloudinary'
 
@@ -19,7 +21,7 @@ export default function ImageGallery({
   const [nextCursor, setNextCursor] = useState(defaultNextCursor)
   const [totalCount, setTotalCount] = useState(defaultTotalCount)
   const [activeFolder, setActiveFolder] = useState('')
-  const [index, setIndex] = useState(-1);
+  const [index, setIndex] = useState(-1)
 
   useEffect(() => {
     (async function run() {
@@ -44,7 +46,6 @@ export default function ImageGallery({
     })()
   }, [activeFolder])
 
-  
   const LoadingSpinner = () => {
     useEffect(() => {
       return () => {
@@ -66,6 +67,14 @@ export default function ImageGallery({
     )
   }
 
+  const clickItem = data => {
+    ga.event({
+      action: 'click',
+      params: {
+        item: data
+      }
+    })
+  }
 
   return (
     <Container
@@ -91,7 +100,7 @@ export default function ImageGallery({
               colorScheme="white"
               data-folder-path='""'
               data-ga="Tattoos Gallery"
-              //   onClick={e => clickItem(e.target.getAttribute('data-ga'))}
+              onClick={e => clickItem(e.target.getAttribute('data-ga'))}
             >
               Tattoos
             </Button>
@@ -110,7 +119,7 @@ export default function ImageGallery({
                     colorScheme="white"
                     data-folder-path={folder.path}
                     data-ga={folder.name + ' ' + 'Gallery'}
-                    // onClick={e => clickItem(e.target.getAttribute('data-ga'))}
+                    onClick={e => clickItem(e.target.getAttribute('data-ga'))}
                   >
                     {folder.name}
                   </Button>
@@ -128,19 +137,35 @@ export default function ImageGallery({
           {images[0] && images[0].src.length > 0 ? (
             images.map((image, index) => {
               return (
-                <Box key={image.id} pb='6px' _hover={{ cursor: "pointer" }} >
-                <Image
-                  alt={image.title}
-                  src={image.src}
-                  placeholder="blur"
-                  blurDataURL={`data:image/jpeg;base64,${image.blurred}`}
-                  width={image.width}
-                  height={image.height}
-                  pb="10px"
-                  sizes={'30vw'}
-                  layout="responsive"
-                  onClick={() => setIndex(index)}
-                />
+                <Box key={image.id} pb="6px" _hover={{ cursor: 'pointer' }}>
+                  {index <= 3 ? (
+                    <Image
+                      priority
+                      alt={image.title}
+                      src={image.src}
+                      placeholder="blur"
+                      blurDataURL={`data:image/jpeg;base64,${image.blurred}`}
+                      width={image.width}
+                      height={image.height}
+                      pb="10px"
+                      sizes={'20vw'}
+                      layout="responsive"
+                      onClick={() => setIndex(index)}
+                    />
+                  ) : (
+                    <Image
+                      alt={image.title}
+                      src={image.src}
+                      placeholder="blur"
+                      blurDataURL={`data:image/jpeg;base64,${image.blurred}`}
+                      width={image.width}
+                      height={image.height}
+                      pb="10px"
+                      sizes={'20vw'}
+                      layout="responsive"
+                      onClick={() => setIndex(index)}
+                    />
+                  )}
                 </Box>
               )
             })
@@ -151,7 +176,7 @@ export default function ImageGallery({
 
         <Lightbox
           open={index >= 0}
-          controller={{closeOnBackdropClick: true}}
+          controller={{ closeOnBackdropClick: true }}
           index={index}
           close={() => setIndex(-1)}
           slides={images}
@@ -203,7 +228,6 @@ export default function ImageGallery({
     </Container>
   )
 
-
   async function handleLoadMore(event) {
     event.preventDefault()
 
@@ -231,7 +255,6 @@ export default function ImageGallery({
     setTotalCount(updatedTotalCount)
   }
 
-
   function handleOnFolderClick(event) {
     const folderPath = event.target.dataset.folderPath
     setActiveFolder(folderPath)
@@ -239,5 +262,4 @@ export default function ImageGallery({
     setImages([])
     setTotalCount(0)
   }
-
 }
