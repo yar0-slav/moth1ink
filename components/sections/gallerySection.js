@@ -5,7 +5,8 @@ import Masonry from 'react-masonry-css'
 
 import * as ga from '../../lib/ga'
 
-import Lightbox from 'yet-another-react-lightbox'
+import 'photoswipe/dist/photoswipe.css'
+import { Gallery, Item } from 'react-photoswipe-gallery'
 
 import { mapImageResources } from '../../lib/cloudinary'
 
@@ -21,7 +22,6 @@ export default function ImageGallery({
   const [nextCursor, setNextCursor] = useState(defaultNextCursor)
   const [totalCount, setTotalCount] = useState(defaultTotalCount)
   const [activeFolder, setActiveFolder] = useState('')
-  const [index, setIndex] = useState(-1)
 
   useEffect(() => {
     (async function run() {
@@ -65,6 +65,12 @@ export default function ImageGallery({
         data-loader={loaderActive}
       />
     )
+  }
+
+  const breakpointColumnsObj = {
+    default: 3,
+    764: 2,
+    321: 1
   }
 
   const clickItem = data => {
@@ -128,87 +134,62 @@ export default function ImageGallery({
             })}
         </Box>
 
-        <Masonry
-          breakpointCols={3}
-          className="my-masonry-grid"
-          columnClassName="my-masonry-grid_column"
-          style={{ minHeight: 50 + 'vh' }}
-        >
-          {images[0] && images[0].src.length > 0 ? (
-            images.map((image, index) => {
-              console.log(image);
-              return (
-                <Box key={image.id} pb="6px" _hover={{ cursor: 'pointer' }}>
-                  {index <= 2 ? (
-                    <Image
-                      priority
-                      alt={image.title}
-                      src={image.thumbnail}
-                      placeholder="blur"
-                      blurDataURL={`data:image/jpeg;base64,${image.blurred}`}
+        <Gallery>
+          <Masonry
+            breakpointCols={breakpointColumnsObj}
+            className="my-masonry-grid"
+            columnClassName="my-masonry-grid_column"
+            style={{ minHeight: 50 + 'vh' }}
+          >
+            {images[0] && images[0].src.length > 0 ? (
+              images.map((image, index) => {
+                return (
+                  <Box key={image.id} pb="6px" _hover={{ cursor: 'pointer' }}>
+                    <Item
+                      original={image.src}
+                      thumbnail={image.thumbnail}
                       width={image.width}
                       height={image.height}
-                      pb="10px"
-                      sizes={'20vw'}
-                      layout="responsive"
-                      onClick={() => setIndex(index)  }
-                    />
-                  ) : (
-                    <Image
-                      alt={image.title}
-                      src={image.thumbnail}
-                      placeholder="blur"
-                      blurDataURL={`data:image/jpeg;base64,${image.blurred}`}
-                      width={image.width}
-                      height={image.height}
-                      pb="10px"
-                      sizes={'20vw'}
-                      layout="responsive"
-                      onClick={() => setIndex(index)}
-                    />
-                  )}
-                </Box>
-              )
-            })
-          ) : (
-            <LoadingSpinner></LoadingSpinner>
-          )}
-        </Masonry>
-
-        <Lightbox
-          open={index >= 0}
-          controller={{ closeOnBackdropClick: true }}
-          index={index}
-          close={() => setIndex(-1)}
-          slides={images}
-          render={{
-            slide: (image, offset, rect) => {
-              const width = Math.round(
-                Math.min(rect.width, (rect.height / image.height) * image.width)
-              )
-              const height = Math.round(
-                Math.min(rect.height, (rect.width / image.width) * image.height)
-              )
-
-              return (
-                <div style={{ position: 'relative', width, height }}>
-                  <Image
-                    alt={image.title}
-                    src={image.src}
-                    width={image.width}
-                    height={image.height}
-                    objectFit="contain"
-                    layout="fill"
-                    placeholder="blur"
-                    blurDataURL={`data:image/jpeg;base64,${image.blurred}`}
-                    loading="eager"
-                    sizes='100vw'
-                  />
-                </div>
-              )
-            }
-          }}
-        />
+                    >
+                      {({ ref, open }) => (
+                        <a ref={ref} onClick={open}>
+                          {index <= 2 ? (
+                            <Image
+                              priority
+                              alt={image.title}
+                              src={image.thumbnail}
+                              placeholder="blur"
+                              blurDataURL={`data:image/jpeg;base64,${image.blurred}`}
+                              width={image.width}
+                              height={image.height}
+                              pb="10px"
+                              sizes={'20vw'}
+                              layout="responsive"
+                            />
+                          ) : (
+                            <Image
+                              alt={image.title}
+                              src={image.thumbnail}
+                              placeholder="blur"
+                              blurDataURL={`data:image/jpeg;base64,${image.blurred}`}
+                              width={image.width}
+                              height={image.height}
+                              pb="10px"
+                              sizes={'20vw'}
+                              layout="responsive"
+                            />
+                          )}
+                        </a>
+                      )}
+                    </Item>
+                  </Box>
+                )
+              })
+            ) : (
+              <LoadingSpinner></LoadingSpinner>
+            )}
+          </Masonry>
+        </Gallery>
 
         {totalCount > images.length && (
           <Flex justifyContent="center" mt={5}>

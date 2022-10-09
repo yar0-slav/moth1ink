@@ -5,8 +5,6 @@ import Chakra from '../components/chakra'
 import { Toaster } from 'react-hot-toast'
 
 import '../styles/main.css'
-import "yet-another-react-lightbox/styles.css";
-
 
 import { useEffect } from 'react'
 
