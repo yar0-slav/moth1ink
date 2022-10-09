@@ -136,13 +136,14 @@ export default function ImageGallery({
         >
           {images[0] && images[0].src.length > 0 ? (
             images.map((image, index) => {
+              console.log(image);
               return (
                 <Box key={image.id} pb="6px" _hover={{ cursor: 'pointer' }}>
-                  {index <= 3 ? (
+                  {index <= 2 ? (
                     <Image
                       priority
                       alt={image.title}
-                      src={image.src}
+                      src={image.thumbnail}
                       placeholder="blur"
                       blurDataURL={`data:image/jpeg;base64,${image.blurred}`}
                       width={image.width}
@@ -150,12 +151,12 @@ export default function ImageGallery({
                       pb="10px"
                       sizes={'20vw'}
                       layout="responsive"
-                      onClick={() => setIndex(index)}
+                      onClick={() => setIndex(index)  }
                     />
                   ) : (
                     <Image
                       alt={image.title}
-                      src={image.src}
+                      src={image.thumbnail}
                       placeholder="blur"
                       blurDataURL={`data:image/jpeg;base64,${image.blurred}`}
                       width={image.width}
@@ -196,16 +197,12 @@ export default function ImageGallery({
                     src={image.src}
                     width={image.width}
                     height={image.height}
+                    objectFit="contain"
+                    layout="fill"
                     placeholder="blur"
                     blurDataURL={`data:image/jpeg;base64,${image.blurred}`}
                     loading="eager"
-                    sizes={
-                      typeof window !== 'undefined'
-                        ? `${Math.ceil(
-                            (image.width / window.innerWidth) * 100
-                          )}vw`
-                        : `${image.width}px`
-                    }
+                    sizes='100vw'
                   />
                 </div>
               )
