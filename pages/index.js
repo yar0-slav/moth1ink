@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, Suspense  } from 'react'
 import 'react-medium-image-zoom/dist/styles.css'
 
 import dynamic from 'next/dynamic'
@@ -6,9 +6,16 @@ import dynamic from 'next/dynamic'
 import { Container } from '@chakra-ui/react'
 
 import IndexContent from '../components/sections/indexSection/indexContent'
-const ImageGallery = dynamic(() => import('../components/sections/gallerySection'));
-const Reviews = dynamic(() => import('../components/sections/reviewsSection/reviewsSection'));
-const Contact = dynamic(() => import('../components/sections/contactSection'));
+
+const ImageGallery = dynamic(() => import('../components/sections/gallerySection'), {
+  suspense: true,
+});
+const Reviews = dynamic(() => import('../components/sections/reviewsSection/reviewsSection'), {
+  suspense: true,
+});
+const Contact = dynamic(() => import('../components/sections/contactSection'), {
+  suspense: true,
+});
 
 
 import { getFolders, mapImageResources, search } from '../lib/cloudinary'
@@ -38,23 +45,29 @@ export default function Page({
     >
       <IndexContent></IndexContent>
 
-      <ImageGallery
-        defaultImages={defaultImages}
-        defaultNextCursor={defaultNextCursor}
-        folders={folders}
-        defaultTotalCount={defaultTotalCount}
-        loaderActive={loaderActive}
-        setLoaderActive={setLoaderActive}
-      ></ImageGallery>
+      <Suspense fallback={<div>Loading...</div>}>
+        <ImageGallery
+          defaultImages={defaultImages}
+          defaultNextCursor={defaultNextCursor}
+          folders={folders}
+          defaultTotalCount={defaultTotalCount}
+          loaderActive={loaderActive}
+          setLoaderActive={setLoaderActive}
+        ></ImageGallery>
+      </Suspense>
+      
+      <Suspense fallback={<div>Loading...</div>}>
+        <Reviews
+          reviews={defaultReviews}
+          reviewsTotal={reviewsTotal.length}
+          loaderActive={loaderActive}
+          reviewsLimit={LIMIT}
+        ></Reviews>
+      </Suspense>
 
-      <Reviews
-        reviews={defaultReviews}
-        reviewsTotal={reviewsTotal.length}
-        loaderActive={loaderActive}
-        reviewsLimit={LIMIT}
-      ></Reviews>
-
-      <Contact />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Contact />
+      </Suspense>
 
     </Container>
   )
@@ -70,16 +83,18 @@ export async function getServerSideProps() {
     next_cursor: nextCursor,
     total_count: totalCount
   } = results
-  const images = mapImageResources(resources)
-  const { folders } = await getFolders()
+  const images = mapImageResources(resources);
+  const { folders } = await getFolders();
 
   const postsQuery = firestore
     .collection('comments')
     .orderBy('time', 'desc')
-    .limit(LIMIT)
-  const postsTotal = firestore.collection('reviews').orderBy('time', 'desc')
-  const reviews = (await postsQuery.get()).docs.map(postToJSON)
-  const reviewsTotal = (await postsTotal.get()).docs.map(postToJSON)
+    .limit(LIMIT);
+  const postsTotal = firestore.collection('reviews').orderBy('time', 'desc');
+
+  const reviews = (await postsQuery.get()).docs.map(postToJSON);
+  const reviewsTotal = (await postsTotal.get()).docs.map(postToJSON);
+
 
   return {
     props: {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { firestore, fromMillis, postToJSON } from '../../../lib/firebase'
 
 import { Container, Box, Flex, Text, Heading, Button } from '@chakra-ui/react'
@@ -11,12 +11,37 @@ import AddNewReview from './newReview'
 
 export default function Reviews({
   reviews: defaultReviews,
-  reviewsTotal,
+  reviewsTotal: totalReviews,
   loaderActive,
   reviewsLimit
 }) {
+  const [hydrated, setHydrated] = useState(false)
+
   const [reviews, setReviews] = useState(defaultReviews)
+  const [reviewsTotal, setReviewsTotal] = useState(totalReviews)
   const [reviewsEnd, setReviewsEnd] = useState(false)
+
+  useEffect(() => {
+    (async () => {
+      const postsQuery = firestore
+        .collection('comments')
+        .orderBy('time', 'desc')
+        .limit(reviewsLimit)
+      const postsTotal = firestore.collection('reviews').orderBy('time', 'desc')
+
+      const reviews = (await postsQuery.get()).docs.map(postToJSON)
+      const reviewsTotal = (await postsTotal.get()).docs.map(postToJSON)
+
+      setReviews(reviews)
+      setReviewsTotal(reviewsTotal)
+      setHydrated(true)
+
+    })()
+  }, [])
+
+  if (!hydrated) {
+    return null
+  }
 
   const getMoreReviews = async () => {
     const last = reviews[reviews.length - 1]
