@@ -22,6 +22,7 @@ export default function Reviews({
   const [reviewsEnd, setReviewsEnd] = useState(false)
 
   useEffect(() => {
+    setHydrated(true);
     (async () => {
       const postsQuery = firestore
         .collection('comments')
@@ -34,7 +35,6 @@ export default function Reviews({
 
       setReviews(reviews)
       setReviewsTotal(reviewsTotal)
-      setHydrated(true)
 
     })()
   }, [])
