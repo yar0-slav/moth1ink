@@ -118,11 +118,11 @@ export default function Reviews({
                     </Box>
                     <Box>
                       {comment.content.length > 0 ? (
-                        <Text my="25px">{comment.content}</Text>
+                        <Text px='1rem' my="25px">{comment.content}</Text>
                       ) : (
                         ''
                       )}
-                      <Flex my="10px">
+                      <Flex px='1rem' my="10px">
                         {filteredValues.map(inner => {
                           var innerIndex = inner.column === 'pros' ? 0 : 1
                           return (
