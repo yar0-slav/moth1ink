@@ -19,6 +19,7 @@ const Contact = dynamic(() => import('../components/sections/contactSection'), {
 
 
 import { getFolders, mapImageResources, search } from '../lib/cloudinary'
+import { mapReviews } from '../lib/translate'
 import { firestore, postToJSON } from '../lib/firebase'
 
 
@@ -59,7 +60,7 @@ export default function Page({
       <Suspense fallback={<div>Loading...</div>}>
         <Reviews
           reviews={defaultReviews}
-          reviewsTotal={reviewsTotal.length}
+          reviewsTotal={reviewsTotal}
           loaderActive={loaderActive}
           reviewsLimit={LIMIT}
         ></Reviews>
@@ -90,11 +91,12 @@ export async function getServerSideProps() {
     .collection('comments')
     .orderBy('time', 'desc')
     .limit(LIMIT);
-  const postsTotal = firestore.collection('reviews').orderBy('time', 'desc');
+  const postsTotal = firestore
+  .collection('comments')
+  .orderBy('time', 'desc');
 
-  const reviews = (await postsQuery.get()).docs.map(postToJSON);
-  const reviewsTotal = (await postsTotal.get()).docs.map(postToJSON);
-
+  const reviews = await mapReviews(postsQuery);
+  const reviewsTotal = (await postsTotal.get()).docs.map(postToJSON).length;
 
   return {
     props: {
@@ -102,7 +104,7 @@ export async function getServerSideProps() {
       nextCursor: nextCursor || false,
       totalCount,
       folders,
-      reviews,
+      reviews: JSON.parse(JSON.stringify(reviews)),
       reviewsTotal
     }
   }

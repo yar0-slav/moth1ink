@@ -11,6 +11,7 @@ import { Gallery, Item } from 'react-photoswipe-gallery'
 import { mapImageResources } from '../../lib/cloudinary'
 
 export default function ImageGallery({
+  
   defaultImages,
   defaultNextCursor,
   folders,

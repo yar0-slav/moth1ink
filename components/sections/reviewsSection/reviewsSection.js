@@ -1,18 +1,26 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { firestore, fromMillis, postToJSON } from '../../../lib/firebase'
 
-import { Container, Box, Flex, Text, Heading, Button } from '@chakra-ui/react'
+import { mapReviews } from '../../../lib/translate'
+
+import {
+  Box,
+  Button,
+  Container,
+  Flex,
+  Heading,
+  Icon,
+  Text
+} from '@chakra-ui/react'
 import moment from 'moment'
+import { IoAddCircleSharp, IoRemoveCircleSharp, IoStar } from 'react-icons/io5'
 import StarsRating from 'react-star-rate'
-import { Icon } from '@chakra-ui/react'
-import { IoRemoveCircleSharp, IoAddCircleSharp, IoStar } from 'react-icons/io5'
 
 import AddNewReview from './newReview'
 
 export default function Reviews({
   reviews: defaultReviews,
   reviewsTotal: totalReviews,
-  loaderActive,
   reviewsLimit
 }) {
   const [hydrated, setHydrated] = useState(false)
@@ -20,22 +28,24 @@ export default function Reviews({
   const [reviews, setReviews] = useState(defaultReviews)
   const [reviewsTotal, setReviewsTotal] = useState(totalReviews)
   const [reviewsEnd, setReviewsEnd] = useState(false)
+  const [showTranslation, setShowTranslation] = useState(undefined)
 
   useEffect(() => {
-    setHydrated(true);
     (async () => {
       const postsQuery = firestore
         .collection('comments')
         .orderBy('time', 'desc')
         .limit(reviewsLimit)
-      const postsTotal = firestore.collection('reviews').orderBy('time', 'desc')
+      const postsTotal = firestore
+        .collection('comments')
+        .orderBy('time', 'desc')
 
-      const reviews = (await postsQuery.get()).docs.map(postToJSON)
-      const reviewsTotal = (await postsTotal.get()).docs.map(postToJSON)
+      const reviews = await mapReviews(postsQuery)
+      const reviewsTotal = (await postsTotal.get()).docs.map(postToJSON).length
 
       setReviews(reviews)
       setReviewsTotal(reviewsTotal)
-
+      setHydrated(true)
     })()
   }, [])
 
@@ -54,7 +64,7 @@ export default function Reviews({
       .startAfter(cursor)
       .limit(reviewsLimit)
 
-    const newReviews = (await query.get()).docs.map(postToJSON)
+    const newReviews = await mapReviews(query)
 
     setReviews(reviews.concat(newReviews))
 
@@ -66,7 +76,7 @@ export default function Reviews({
   return (
     <Box id="reviews">
       <Heading my="5vh">
-        Reviews {reviewsTotal.length >= 50 ? `(${reviewsTotal.length})` : ''}
+        Reviews {reviewsTotal >= 50 ? `(${reviewsTotal})` : ''}
       </Heading>
 
       <Container maxW={'container.lg'} p={0}>
@@ -118,11 +128,14 @@ export default function Reviews({
                     </Box>
                     <Box>
                       {comment.content.length > 0 ? (
-                        <Text px='1rem' my="25px">{comment.content}</Text>
+                        <Box px="1rem" my="25px">
+                          <Text>{comment.content}</Text>
+                        </Box>
                       ) : (
                         ''
                       )}
-                      <Flex px='1rem' my="10px">
+
+                      <Flex px="1rem" my="10px">
                         {filteredValues.map(inner => {
                           var innerIndex = inner.column === 'pros' ? 0 : 1
                           return (
@@ -151,6 +164,59 @@ export default function Reviews({
                           )
                         })}
                       </Flex>
+                      <Box px="1rem">
+                        {comment.translation.length > 0 && (
+                          <Box>
+                            <Button
+                              variant="lnk"
+                              p='0'
+                              mt='1rem'
+                              onClick={() => setShowTranslation(comment.id)}
+                            >
+                             {showTranslation === comment.id ? 'Translation:' : 'Show translation'} 
+                            </Button>
+                          </Box>
+                        )}
+
+                        {showTranslation === comment.id && (
+                          <Box px="1rem" mt="15px" mb="25px">{comment.translation}</Box>
+                        )}
+                        <Flex px="1rem" my="10px">
+                          {showTranslation === comment.id &&
+                            filteredValues.map(inner => {
+                              var innerIndex = inner.column === 'pros' ? 0 : 1
+                              return (
+                                <Box flexBasis={'49%'} key={inner.column}>
+                                  {inner.inputValues.map((values, index) => {
+                                    return (
+                                      <Flex
+                                        mb={'.5rem'}
+                                        key={values.valueTranslation + index}
+                                      >
+                                        {innerIndex === 0 ? (
+                                          <Icon
+                                            as={IoAddCircleSharp}
+                                            color="green"
+                                            fontSize={'28px'}
+                                          />
+                                        ) : (
+                                          <Icon
+                                            as={IoRemoveCircleSharp}
+                                            color="red"
+                                            fontSize={'28px'}
+                                          />
+                                        )}
+                                        <Text ml="1rem">
+                                          {values.valueTranslation}
+                                        </Text>
+                                      </Flex>
+                                    )
+                                  })}
+                                </Box>
+                              )
+                            })}
+                        </Flex>
+                      </Box>
                     </Box>
                   </Container>
                 )
@@ -158,12 +224,12 @@ export default function Reviews({
             : ''}
         </Flex>
       </Container>
-      {!loaderActive && !reviewsEnd && reviewsLimit < reviewsTotal.length && (
+      {!reviewsEnd && reviewsLimit < reviewsTotal && (
         <Box display="flex" flexDirection="column" alignItems="center">
           <Button
             onClick={getMoreReviews}
             colorScheme="moth"
-            display={loaderActive ? 'none' : 'block'}
+            display="block"
             mt="5vh"
             mb="10vh"
             w="sm"

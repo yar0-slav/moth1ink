@@ -1,3 +1,9 @@
+import React, { useState } from 'react'
+import { firestore, serverTimestamp } from '../../../lib/firebase'
+
+import toast from 'react-hot-toast'
+import StarsRating from 'react-star-rate'
+
 import {
   Box,
   Button,
@@ -10,18 +16,11 @@ import {
   Textarea,
   Heading
 } from '@chakra-ui/react'
-import React, { useState } from 'react'
-
-import { firestore, serverTimestamp } from '../../../lib/firebase'
+import { Icon } from '@chakra-ui/react'
+import { IoAddCircleSharp, IoRemoveCircleSharp, IoStar } from 'react-icons/io5'
 
 import 'react-medium-image-zoom/dist/styles.css'
 
-import toast from 'react-hot-toast'
-
-import StarsRating from 'react-star-rate'
-
-import { Icon } from '@chakra-ui/react'
-import { IoAddCircleSharp, IoRemoveCircleSharp, IoStar } from 'react-icons/io5'
 
 export default function AddNewReview() {
   const [username, setUsername] = useState('')
@@ -36,6 +35,7 @@ export default function AddNewReview() {
       inputValues: [
         {
           value: '',
+          valueTranslation: '',
           executed: false
         }
       ]
@@ -45,6 +45,7 @@ export default function AddNewReview() {
       inputValues: [
         {
           value: '',
+          valueTranslation: '',
           executed: false
         }
       ]
@@ -68,11 +69,16 @@ export default function AddNewReview() {
       return { ...x, inputValues: filtered }
     })
 
+    const translation = '';
+    const language = '';
+
     const data = {
       username,
       content,
       starRating,
       filteredValues,
+      translation,
+      language,
       time: serverTimestamp()
     }
 
@@ -94,7 +100,7 @@ export default function AddNewReview() {
 
       setValues(
         values.map((elem, arrayIndex) => {
-          let newfield = { value: '', executed: false }
+          let newfield = { value: '', valueTranslation: '', executed: false }
           return arrayIndex === columnIndex
             ? { ...elem, inputValues: [...elem.inputValues, newfield] }
             : elem

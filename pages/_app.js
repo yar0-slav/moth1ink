@@ -22,15 +22,15 @@ const Website = ({ Component, pageProps, router }) => {
   }, [router.events])
 
   return (
-    <Chakra cookies={pageProps.cookies}>
-      <Fonts />
-      <Layout router={router}>
-        <AnimatePresence exitBeforeEnter initial={true}>
-          <Component {...pageProps} key={router.route} />
-          <Toaster />
-        </AnimatePresence>
-      </Layout>
-    </Chakra>
+      <Chakra cookies={pageProps.cookies}>
+        <Fonts />
+        <Layout router={router}>
+          <AnimatePresence exitBeforeEnter initial={true}>
+            <Component {...pageProps} key={router.route} />
+            <Toaster />
+          </AnimatePresence>
+        </Layout>
+      </Chakra>
   )
 }
 
